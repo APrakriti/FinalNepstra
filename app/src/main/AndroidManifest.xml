@@ -67,7 +67,10 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".BillingDetails" />
         <activity android:name=".Billing" />
-        <activity android:name=".LoginVolley"></activity>
+        <activity android:name=".LoginVolley" />
+        <activity android:name=".MyOrders" />
+
+
     </application>
 
 </manifest>

@@ -46,6 +46,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+//http://nepstra.com/api/android/finalorder.php?
+// is_new_customer=1&email=ramhari@ramhari.com&first_name=fn&last_name=ln&username=ramhari@ramhari.com
+// &password=prakash&b[first_name]=bfn&b[last_name]=bln&b[company]=bc&b[address_1]=ba1&b[address_2]=ba2
+// &b[city]=bc&b[state]=bs&b[postcode]=bpc&b[country]=bc&b[email]=ramhari@ramhari.com&b[phone]=bp
+// &s[first_name]=sfn&s[last_name]=sln&s[company]=sc&s[address_1]=sa1&s[address_2]=sa2&s[city]=sc
+// &s[state]=ss&s[postcode]=spc&s[country]=sc&s[email]=ramhari@ramhari.com&s[phone]=sp
+// &payment_method=cod&payment_method_title=cash_on_delivery&set_paid=true&s_lines[method_id]=1
+// &s_lines[method_title]=shipping_title&s_lines[total]=50&line_items[101-1]&line_items[80-1]
 
 public class Billing extends AppCompatActivity {
     EditText fname,lname, cname, address_1, address_2,
@@ -284,34 +292,84 @@ public class Billing extends AppCompatActivity {
 //                            .buildUpon()
 //                            .appendQueryParameter("email", "val")
 //                            .build().toString();
-                    StringRequest sr = new StringRequest(Request.Method.POST, "http://nepstra.com/api/android/newcustomer.php?" +
-                            "email="+semail +
-                            "&first_name="+sname +
-                            "&last_name="+slname +
-                            "&username="+sname +
-                            "&password="+spassword +
-                            "&b[first_name]="+sname +
-                            "&b[last_name]="+slname +
-                            "&b[company]="+sname +
-                            "&b[address_1]="+saddress_1 +
-                            "&b[address_2]="+saddress_2+
-                            "&b[city]="+scity +
-                            "&b[state]="+sstate +
-                            "&b[postcode]="+spostcode +
-                            "&b[country]="+scountry +
-                            "&b[email]="+semail +
-                            "&b[phone]="+sphone +
-                            "&s[first_name]="+sshipfname +
-                            "&s[last_name]="+sshiplname +
-                            "&s[company]="+sshipcompany +
-                            "&s[address_1]="+sshipaddress_1 +
-                            "&s[address_2]="+sshipaddress_2 +
-                            "&s[city]="+sshipcity +
-                            "&s[state]="+sshipstate +
-                            "&s[postcode]="+sshippostcode +
-                            "&s[country]="+sshipcountry +
-                            "&s[email]="+semail +
-                            "&s[phone]="+sphone,
+                    //http://nepstra.com/api/android/finalorder.php?
+// is_new_customer=1&email=ramhari@ramhari.com&first_name=fn&last_name=ln&username=ramhari@ramhari.com
+// &password=prakash&b[first_name]=bfn&b[last_name]=bln&b[company]=bc&b[address_1]=ba1&b[address_2]=ba2
+// &b[city]=bc&b[state]=bs&b[postcode]=bpc&b[country]=bc&b[email]=ramhari@ramhari.com&b[phone]=bp
+// &s[first_name]=sfn&s[last_name]=sln&s[company]=sc&s[address_1]=sa1&s[address_2]=sa2&s[city]=sc
+// &s[state]=ss&s[postcode]=spc&s[country]=sc&s[email]=ramhari@ramhari.com
+// &s[phone]=sp
+// &payment_method=cod&payment_method_title=cash_on_delivery&set_paid=true&s_lines[method_id]=1
+// &s_lines[method_title]=shipping_title&s_lines[total]=50&line_items[101-1]&line_items[80-1]
+                    StringRequest sr = new StringRequest(Request.Method.POST,
+                            "http://nepstra.com/api/android/finalorder.php?is_new_customer=1" +
+                                    "email="+semail +
+                                    "&first_name="+sname +
+                                    "&last_name="+slname +
+                                    "&username="+sname +
+                                    "&password="+spassword +
+                                    "&b[first_name]="+sname +
+                                    "&b[last_name]="+slname +
+                                    "&b[company]="+sname +
+                                    "&b[address_1]="+saddress_1 +
+                                    "&b[address_2]="+saddress_2+
+                                    "&b[city]="+scity +
+                                    "&b[state]="+sstate +
+                                    "&b[postcode]="+spostcode +
+                                    "&b[country]="+scountry +
+                                    "&b[email]="+semail +
+                                    "&b[phone]="+sphone +
+                                    "&s[first_name]="+sshipfname +
+                                    "&s[last_name]="+sshiplname +
+                                    "&s[company]="+sshipcompany +
+                                    "&s[address_1]="+sshipaddress_1 +
+                                    "&s[address_2]="+sshipaddress_2 +
+                                    "&s[city]="+sshipcity +
+                                    "&s[state]="+sshipstate +
+                                    "&s[postcode]="+sshippostcode +
+                                    "&s[country]="+sshipcountry +
+                                    "&s[email]="+semail +
+                                    "&s[phone]="+sphone +
+                                    "&payment_method=" +"cod"+
+                                    "&payment_method_title=" + "cash on delivery"+
+                                    "&set_paid=" + true +
+                                    "&s_lines[method_id] =" +1 +
+                                    "&s_lines[method_title]=" +"shipping_title"+
+                                    "&s_lines[total]=" + 50+
+                                    "&line_items[101-1]" +
+                                    "&line_items[80-1]",
+
+// &payment_method=cod&payment_method_title=cash_on_delivery&set_paid=true&s_lines[method_id]=1
+// &s_lines[method_title]=shipping_title&s_lines[total]=50&line_items[101-1]&line_items[80-1]
+//                    StringRequest sr = new StringRequest(Request.Method.POST,
+//                            "http://nepstra.com/api/android/newcustomer.php?" +
+//                            "email="+semail +
+//                            "&first_name="+sname +
+//                            "&last_name="+slname +
+//                            "&username="+sname +
+//                            "&password="+spassword +
+//                            "&b[first_name]="+sname +
+//                            "&b[last_name]="+slname +
+//                            "&b[company]="+sname +
+//                            "&b[address_1]="+saddress_1 +
+//                            "&b[address_2]="+saddress_2+
+//                            "&b[city]="+scity +
+//                            "&b[state]="+sstate +
+//                            "&b[postcode]="+spostcode +
+//                            "&b[country]="+scountry +
+//                            "&b[email]="+semail +
+//                            "&b[phone]="+sphone +
+//                            "&s[first_name]="+sshipfname +
+//                            "&s[last_name]="+sshiplname +
+//                            "&s[company]="+sshipcompany +
+//                            "&s[address_1]="+sshipaddress_1 +
+//                            "&s[address_2]="+sshipaddress_2 +
+//                            "&s[city]="+sshipcity +
+//                            "&s[state]="+sshipstate +
+//                            "&s[postcode]="+sshippostcode +
+//                            "&s[country]="+sshipcountry +
+//                            "&s[email]="+semail +
+//                            "&s[phone]="+sphone,
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {

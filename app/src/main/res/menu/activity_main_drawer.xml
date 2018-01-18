@@ -53,7 +53,11 @@
             android:title="About Us"
             android:icon="@drawable/btn_about"
             />
-
+        <item
+            android:id="@+id/nav_my_orders"
+            android:title="My Orders"
+            android:icon="@drawable/btn_about"
+            />
     </group>
 
 

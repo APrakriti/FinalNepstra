@@ -3,11 +3,13 @@ package com.sonika.nepstra;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
 import com.sonika.nepstra.Navigations.ArtAndCraft;
@@ -29,6 +32,8 @@ import com.sonika.nepstra.Navigations.Mens;
 import com.sonika.nepstra.Navigations.NewArrival;
 import com.sonika.nepstra.Navigations.Sports;
 import com.sonika.nepstra.Navigations.Womens;
+import com.sonika.nepstra.adapters.MyOrderAdpater;
+
 import com.sonika.nepstra.helpers.MySharedPreference;
 import com.sonika.nepstra.listener.ListViewListener;
 import com.sonika.nepstra.pojo.AllProducts;
@@ -149,6 +154,21 @@ public class MainActivity extends AppCompatActivity
             Intent i = new Intent(MainActivity.this, ArtAndCraft.class);
             startActivity(i);
 
+        }
+        else if (id == R.id.nav_my_orders) {
+            SharedPreferences loginpref = getSharedPreferences("LOGINPREF", MODE_PRIVATE);
+            Intent i = null;
+
+
+            if (loginpref.getBoolean("login", true))
+            { Log.e("login", "myorder");
+                i = new Intent(MainActivity.this, MyOrders.class);
+                startActivity(i);
+            }
+            else
+            {
+                Toast.makeText(this, "you must login first", Toast.LENGTH_SHORT).show();
+            }
         }
 
 

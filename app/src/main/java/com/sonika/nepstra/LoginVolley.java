@@ -2,6 +2,7 @@ package com.sonika.nepstra;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,9 +30,10 @@ import java.util.Map;
 
 public class LoginVolley extends AppCompatActivity {
     EditText email, password;
-    String semail, spassword;
+    String semail, spassword, shemail;
     Button btnRegister, login;
     ProgressDialog mprogressDialog;
+    SharedPreferences loginpref;
 
 
     @Override
@@ -79,17 +81,53 @@ public class LoginVolley extends AppCompatActivity {
 //                                        Integer data = jsonObject.getInt(String.valueOf(1)); //yo k gareko?? data =
 //yo email add xa tei ni eror akoxa
                                         Log.e("status",status);
+                                        loginpref = getSharedPreferences("LOGINPREF", MODE_PRIVATE);
+                                        SharedPreferences.Editor loginedit = loginpref.edit();
 
 
                                         if(status.equals("success")){
                                             Intent i = new Intent(LoginVolley.this, MainActivity.class);
-                                            startActivity(i); }
+                                            startActivity(i);
+                                            shemail = email.getText().toString();
+                                            loginpref = getSharedPreferences("LOGINPREF", MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = loginpref.edit();
+                                            editor.putString("spemail",shemail);
+                                            editor.apply();
+                                            editor.commit();
+                                            loginedit.putBoolean("login", true);
+                                           }
+
+
                                          else if (status.equals("error")) {
+                                            loginedit.putBoolean("login", false);
+                                            loginedit.commit();
                                             Toast.makeText(LoginVolley.this, "Wrong email adddress", Toast.LENGTH_SHORT).show();
                                         }
                                         //check what is this status ??? you are getting.ok?
 
-                                    } catch (JSONException e) {
+                                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    catch (JSONException e) {
                                         e.printStackTrace();
                                     }
 
