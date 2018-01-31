@@ -22,6 +22,7 @@ public class OrderHelper extends SQLiteOpenHelper {
     String ORDER_TABLE = "CREATE TABLE if not exists `user_orders`  (\n" +
             "                       `id` INTEGER PRIMARY KEY ,\n" +
             "                       `name` TEXT,\n" +
+            "                       `count` INTEGER,\n" +
             "                       `cat_id` TEXT,\n" +
             "                       `price` TEXT,\n" +
             "                       `imageone` TEXT\n" +
@@ -41,9 +42,13 @@ public class OrderHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
-    } public void insertOrderInfo(ContentValues cv) {
+    }
+
+    public void insertOrderInfo(ContentValues cv) {
+
+
         getWritableDatabase().insert("user_orders", "", cv);
-        Log.e("insertvaeraxa", "yes");
+        Log.e("insertvaeraxa", "yes1");
 
     }
 
@@ -53,11 +58,12 @@ public class OrderHelper extends SQLiteOpenHelper {
         ArrayList<OrderedProducts_pojo> list = new ArrayList<OrderedProducts_pojo>();
         Cursor cursor = getWritableDatabase().rawQuery(sql, null);
         while (cursor.moveToNext()) {
-            Log.e("movettonext", "lolo");
+            Log.e("movettonext", "yes");
             // Do Somehing here
             OrderedProducts_pojo orderinfo = new OrderedProducts_pojo();
             orderinfo.orderid = cursor.getInt(cursor.getColumnIndex("id"));
             orderinfo.orderedname = cursor.getString(cursor.getColumnIndex("name"));
+            orderinfo.count = cursor.getInt(cursor.getColumnIndex("count"));
             orderinfo.orderedcat_id = cursor.getString(cursor.getColumnIndex("cat_id"));
             orderinfo.orderedprice = cursor.getString(cursor.getColumnIndex("price"));
             orderinfo.orderedimage = cursor.getString(cursor.getColumnIndex("imageone"));
@@ -85,14 +91,31 @@ public class OrderHelper extends SQLiteOpenHelper {
 
     public String GetTotal() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor GetTotal = db.rawQuery("SELECT Sum(price) AS myTotal FROM  user_orders", null);
+        String sql = "SELECT Sum(price * count) " +
+                "AS myTotal FROM  user_orders";
+        Cursor GetTotal = db.rawQuery(sql, null);
         String result = " ";
-        while (GetTotal.moveToNext()) {
-            result = String.valueOf(GetTotal.getDouble(GetTotal.getColumnIndex("myTotal")));
-        }
-        return result;
 
+        while (GetTotal.moveToNext()) {
+            Cursor GetTotal1 = db.rawQuery(sql, null);
+            result = String.valueOf(GetTotal.getDouble(GetTotal1.getColumnIndex("myTotal")));
+        }
+
+        return result;
     }
 
+    public ContentValues updateCount(String id, ContentValues cv){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.update("user_orders",cv,"cat_id="+id,null);
+
+            db.close();
+            return  cv;
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return cv;
+    }
 
 }

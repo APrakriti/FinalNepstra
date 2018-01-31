@@ -20,6 +20,7 @@ import com.sonika.nepstra.helpers.JwelleryHelper;
 import com.sonika.nepstra.helpers.OrderHelper;
 import com.sonika.nepstra.helpers.SportsHelper;
 import com.sonika.nepstra.pojo.Jwellery_pojo;
+import com.sonika.nepstra.pojo.OrderedProducts_pojo;
 import com.sonika.nepstra.pojo.Sports_pojo;
 import com.squareup.picasso.Picasso;
 
@@ -38,7 +39,7 @@ public class SportsAdapter extends BaseAdapter{
     OrderHelper orderHelper;
     DetailsHelper detailsHelper;
     String cname, cimage, cprice, cdesc;
-
+    Integer cid, imgid;
     public SportsAdapter(Context context, List<Sports_pojo> sports_pojoList, int resource) {
         this.context = context;
         this.sports_pojoList = sports_pojoList;
@@ -91,7 +92,7 @@ public class SportsAdapter extends BaseAdapter{
 
 
         holder.sportsname.setText("Name:"+" "+sportsinfo.getSportsname());
-        holder.sportsprice.setText("Price:" + " "+sportsinfo.getSportsprice());
+        holder.sportsprice.setText("A$" + " "+sportsinfo.getSportsprice());
         Picasso.with(context).load(sportsinfo.getSportsimage()).into(holder.sportsimg_product);
 
         holder.btn_sport_view_more.setOnClickListener(new View.OnClickListener() {
@@ -102,11 +103,13 @@ public class SportsAdapter extends BaseAdapter{
                 cimage = sports_pojoList.get(i).getSportsimage();
                 cprice = sports_pojoList.get(i).getSportsprice();
                 cdesc = sports_pojoList.get(i).getSportsdesc();
+                cid = sports_pojoList.get(i).getSportscid();
                 ContentValues cvdetails = new ContentValues();
                 cvdetails.put("name", cname);
                 cvdetails.put("price", cprice);
                 cvdetails.put("imageone", cimage);
                 cvdetails.put("desc" , cdesc);
+                cvdetails.put("c_id" , cid);
                 detailsHelper.insertdetails(cvdetails);
                 Intent intent = new Intent(context , DetailsActivity.class);
 
@@ -120,10 +123,22 @@ public class SportsAdapter extends BaseAdapter{
                 cname = sports_pojoList.get(i).getSportsname();
                 cimage = sports_pojoList.get(i).getSportsimage();
                 cprice =sports_pojoList.get(i).getSportsprice();
+                imgid = sports_pojoList.get(i).getImg_id();
+
                 ContentValues cv = new ContentValues();
+                ArrayList<OrderedProducts_pojo> cartItems = orderHelper.getOrderMessage();
+                for(OrderedProducts_pojo cartItem : cartItems){
+                    if(cartItem.getOrderedcat_id().equals(String.valueOf(imgid))){
+                        cv.put("count",cartItem.count+1);
+                        orderHelper.updateCount(imgid.toString(),cv);
+                        return;
+                    }
+                }
                 cv.put("name", cname);
                 cv.put("price", cprice);
                 cv.put("imageone", cimage);
+                cv.put("cat_id", imgid);
+                cv.put("count", 1);
                 orderHelper.insertOrderInfo(cv);
                 Toast.makeText(context, "added to cart", Toast.LENGTH_SHORT).show();
             }

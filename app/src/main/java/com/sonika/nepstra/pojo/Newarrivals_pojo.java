@@ -9,18 +9,9 @@ import java.io.Serializable;
 public class Newarrivals_pojo implements Serializable {
     public String newname, newprice, newimage, newdesc;
     public Integer newid;
-    public Integer newcid;
+    public Integer newcid, img_id;
 
     public Newarrivals_pojo() {
-    }
-
-    public Newarrivals_pojo(String newname, String newprice, String newimage, String newdesc, Integer newid, Integer newcid) {
-        this.newname = newname;
-        this.newprice = newprice;
-        this.newimage = newimage;
-        this.newdesc = newdesc;
-        this.newid = newid;
-        this.newcid = newcid;
     }
 
     public String getNewname() {
@@ -69,5 +60,23 @@ public class Newarrivals_pojo implements Serializable {
 
     public void setNewcid(Integer newcid) {
         this.newcid = newcid;
+    }
+
+    public Integer getImg_id() {
+        return img_id;
+    }
+
+    public void setImg_id(Integer img_id) {
+        this.img_id = img_id;
+    }
+
+    public Newarrivals_pojo(String newname, String newprice, String newimage, String newdesc, Integer newid, Integer newcid, Integer img_id) {
+        this.newname = newname;
+        this.newprice = newprice;
+        this.newimage = newimage;
+        this.newdesc = newdesc;
+        this.newid = newid;
+        this.newcid = newcid;
+        this.img_id = img_id;
     }
 }

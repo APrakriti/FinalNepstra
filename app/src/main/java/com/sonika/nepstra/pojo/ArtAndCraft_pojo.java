@@ -7,18 +7,9 @@ package com.sonika.nepstra.pojo;
 public class ArtAndCraft_pojo {
     public String artname, artprice, artimage, artdesc;
     public Integer artid;
-    public Integer artcid;
+    public Integer artcid, artimgid;
 
     public ArtAndCraft_pojo() {
-    }
-
-    public ArtAndCraft_pojo(String artname, String artprice, String artimage, String artdesc, Integer artid, Integer artcid) {
-        this.artname = artname;
-        this.artprice = artprice;
-        this.artimage = artimage;
-        this.artdesc = artdesc;
-        this.artid = artid;
-        this.artcid = artcid;
     }
 
     public String getArtname() {
@@ -67,5 +58,23 @@ public class ArtAndCraft_pojo {
 
     public void setArtcid(Integer artcid) {
         this.artcid = artcid;
+    }
+
+    public Integer getArtimgid() {
+        return artimgid;
+    }
+
+    public void setArtimgid(Integer artimgid) {
+        this.artimgid = artimgid;
+    }
+
+    public ArtAndCraft_pojo(String artname, String artprice, String artimage, String artdesc, Integer artid, Integer artcid, Integer artimgid) {
+        this.artname = artname;
+        this.artprice = artprice;
+        this.artimage = artimage;
+        this.artdesc = artdesc;
+        this.artid = artid;
+        this.artcid = artcid;
+        this.artimgid = artimgid;
     }
 }

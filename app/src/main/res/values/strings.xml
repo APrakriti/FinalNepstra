@@ -14,6 +14,7 @@
 
     <string name="no_data_available">No result found</string>
 
+
     <string-array name="states_names">
         <item>Australian Capital Territory</item>
         <item>New South Wales</item>

@@ -27,17 +27,7 @@ public class BillingDetails extends AppCompatActivity {
             city, state,postcode,country,email,phone;
     Button btnplaceorder;
     ProgressDialog mprogressDialog;
-    String sname ;
-    String slname ;
-    String scname ;
-    String saddress_1;
-    String saddress_2;
-    String scity;
-    String sstate;
-    String spostcode;
-    String scountry ;
-    String semail;
-    String sphone;
+    String sname, slname,scname,saddress_1,saddress_2,scity,sstate,spostcode,scountry,semail,sphone ;
     int flag;
 
     @Override
@@ -56,6 +46,8 @@ public class BillingDetails extends AppCompatActivity {
         phone = (EditText) findViewById(R.id.lbl_phone);
         email = (EditText) findViewById(R.id.lbl_email_address);
         btnplaceorder = (Button) findViewById(R.id.btn_place_order);
+
+
         btnplaceorder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,38 +76,39 @@ public class BillingDetails extends AppCompatActivity {
 
 
 
-        SharedPreferences sm = getSharedPreferences("USER_LOGIN", 0);
-        SharedPreferences.Editor editor = sm.edit();
-        editor.putString("name", sname);
-        editor.apply();
-        editor.commit();
-        SharedPreferences sm11 = getSharedPreferences("USER_LOGIN", 0);
-        SharedPreferences.Editor editor11 = sm11.edit();
-        editor11.putString("name", scity);
-        editor11.apply();
-        editor11.commit();
-        SharedPreferences sm112 = getSharedPreferences("USER_LOGIN", 0);
-        SharedPreferences.Editor editor112 = sm11.edit();
-        editor112.putString("name", sstate);
-        editor112.apply();
-        editor11.commit();
-        SharedPreferences sm1 = getSharedPreferences("USER_LOGIN", 0);
-        SharedPreferences.Editor editor1 = sm1.edit();
-        editor1.putString("country", scountry);
-        editor.apply();
-        editor.commit();
-        SharedPreferences sm2 = getSharedPreferences("USER_LOGIN", 0);
-        SharedPreferences.Editor editor2 = sm2.edit();
-        editor2.putString("phone", sphone);
-        editor.apply();
-        editor.commit();
-        SharedPreferences sm3 = getSharedPreferences("USER_LOGIN", 0);
-        SharedPreferences.Editor editor3 = sm3.edit();
-        editor3.putString("email", semail);
-        editor.apply();
-        editor.commit();
+//        SharedPreferences sm = getSharedPreferences("USER_LOGIN", 0);
+//        SharedPreferences.Editor editor = sm.edit();
+//        editor.putString("name", sname);
+//        editor.apply();
+//        editor.commit();
+//        SharedPreferences sm11 = getSharedPreferences("USER_LOGIN", 0);
+//        SharedPreferences.Editor editor11 = sm11.edit();
+//        editor11.putString("name", scity);
+//        editor11.apply();
+//        editor11.commit();
+//        SharedPreferences sm112 = getSharedPreferences("USER_LOGIN", 0);
+//        SharedPreferences.Editor editor112 = sm11.edit();
+//        editor112.putString("name", sstate);
+//        editor112.apply();
+//        editor11.commit();
+//        SharedPreferences sm1 = getSharedPreferences("USER_LOGIN", 0);
+//        SharedPreferences.Editor editor1 = sm1.edit();
+//        editor1.putString("country", scountry);
+//        editor.apply();
+//        editor.commit();
+//        SharedPreferences sm2 = getSharedPreferences("USER_LOGIN", 0);
+//        SharedPreferences.Editor editor2 = sm2.edit();
+//        editor2.putString("phone", sphone);
+//        editor.apply();
+//        editor.commit();
+//        SharedPreferences sm3 = getSharedPreferences("USER_LOGIN", 0);
+//        SharedPreferences.Editor editor3 = sm3.edit();
+//        editor3.putString("email", semail);
+//        editor.apply();
+//        editor.commit();
 
-
+//k garne ho api naayepaxi :P
+        //JHEU LAGISAKYO
     }
 
 

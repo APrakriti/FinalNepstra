@@ -1,7 +1,6 @@
 package com.sonika.nepstra.pojo;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  * Created by Prakriti on 12/5/2017.
@@ -10,78 +9,31 @@ import org.json.JSONObject;
 public class Myorder {
     public transient JSONArray line_item_taxes, line_item_meta_data, tax_lines, tax_lines_taxes,
             fee_lines, coupon_lines, refunds;
-    public Boolean prices_include_tax, date_paid, date_paid_gmt, date_completed, date_completed_gmt;
-    public String number;
-    public String order_key;
-    public String created_via;
-    public String version;
-    public String status;
-    public String currence;
-    public String date_created;
-    public String date_created_gmt;
-    public String date_modified;
-    public String date_modified_gmt;
-    public String discount_total;
-    public String discount_tax;
-    public String shipping_tax;
-    public String shipping_total;
-    public String cart_tax;
-    public String total;
-    public String total_tax;
-    public String customer_ip_address;
-    public String customer_user_agent;
-    public String customer_note;
-    public String billing_fname;
-    public String billing_last_name;
-    public String billing_company;
-    public String billing_address_1;
-    public String billing_adddress_2;
-    public String billing_city;
-    public String billing_state;
-    public String billing_postcode;
-    public String billing_country;
-    public String billing_email;
-    public String billing_phone;
-    public String shipping_fname;
-    public String shipping_last_name;
-    public String shipping_company;
-    public String shippingbilling_address_1;
-    public String shipping_adddress_2;
-    public String shipping_city;
-    public String shipping_state;
-    public String shipping_postcode;
-    public String shipping_country;
-    public String payment_method;
-    public String payment_method_title;
-    public String transaction_id;
-    public String cart_hash;
-    public String meta_data_key;
-    public String meta_data_value;
-//    public String meta_data_value_document_type;
-    public String line_item_name;
-    public String line_item_tax_class;
-    public String line_item_subtotal;
-    public String line_item_subtotal_tax;
-    public String line_item_total;
-    public String line_item_total_tax;
-    public String sku;
-    public String shipping_method_title;
-    public String shipping_method_id;
-    public String shipping_line_total;
-    public String shipping_total_taxes;
-    public String shipping_meta_data_key;
-    public String shipping_meta_data_value;
-    public String links_self_href;
-    public String links_collection_href;
-    public String links_customer_href;
+    public Boolean prices_include_tax, date_paid, date_paid_gmt, date_completed, date_completed_gmt, prefix,
+            auffix, padding;
+    public String number, order_key, created_via, version, status, currence, date_created, date_created_gmt,
+            date_modified, date_modified_gmt, discount_total, discount_tax, shipping_tax, shipping_total,
+            cart_tax, total, total_tax, customer_ip_address, customer_user_agent, customer_note,
+            billing_fname, billing_last_name, billing_company, billing_address_1, billing_adddress_2, billing_city,
+            billing_state, billing_postcode, billing_country, billing_email, billing_phone, shipping_fname,
+            shipping_last_name, shipping_company, shippingbilling_address_1, shipping_adddress_2, shipping_city,
+            shipping_state, shipping_postcode, shipping_country, payment_method, payment_method_title, transaction_id,
+            cart_hash,
+            meta_data_key, meta_data_value, meta_data_value_formatted_number, meta_data_value_document_type, line_item_name, line_item_tax_class,
+            line_item_subtotal, line_item_subtotal_tax, line_item_total, line_item_total_tax, sku,
+            shipping_method_title,
+            shipping_method_id,
+            shipping_line_total, shipping_total_taxes, shipping_meta_data_key, shipping_meta_data_value, links_self_href,
+            links_collection_href,
+            links_customer_href;
     public Integer id, parent_id, customer_id, meta_id,
             line_id, line_quantity, line_product_id, line_variation_id,
-            line_price, shipping_lines_id, shipping_meta_data_id;
+            line_price, shipping_lines_id, shipping_meta_data_id, meta_data_value_number, meta_data_value_order_id;
 
     public Myorder() {
     }
 
-    public Myorder(JSONArray line_item_taxes, JSONArray line_item_meta_data, JSONArray tax_lines, JSONArray tax_lines_taxes, JSONArray fee_lines, JSONArray coupon_lines, JSONArray refunds, Boolean prices_include_tax, Boolean date_paid, Boolean date_paid_gmt, Boolean date_completed, Boolean date_completed_gmt, String number, String order_key, String created_via, String version, String status, String currence, String date_created, String date_created_gmt, String date_modified, String date_modified_gmt, String discount_total, String discount_tax, String shipping_tax, String shipping_total, String cart_tax, String total, String total_tax, String customer_ip_address, String customer_user_agent, String customer_note, String billing_fname, String billing_last_name, String billing_company, String billing_address_1, String billing_adddress_2, String billing_city, String billing_state, String billing_postcode, String billing_country, String billing_email, String billing_phone, String shipping_fname, String shipping_last_name, String shipping_company, String shippingbilling_address_1, String shipping_adddress_2, String shipping_city, String shipping_state, String shipping_postcode, String shipping_country, String payment_method, String payment_method_title, String transaction_id, String cart_hash, String meta_data_key, String meta_data_value, String line_item_name, String line_item_tax_class, String line_item_subtotal, String line_item_subtotal_tax, String line_item_total, String line_item_total_tax, String sku, String shipping_method_title, String shipping_method_id, String shipping_line_total, String shipping_total_taxes, String shipping_meta_data_key, String shipping_meta_data_value, String links_self_href, String links_collection_href, String links_customer_href, Integer id, Integer parent_id, Integer customer_id, Integer meta_id, Integer line_id, Integer line_quantity, Integer line_product_id, Integer line_variation_id, Integer line_price, Integer shipping_lines_id, Integer shipping_meta_data_id) {
+    public Myorder(JSONArray line_item_taxes, JSONArray line_item_meta_data, JSONArray tax_lines, JSONArray tax_lines_taxes, JSONArray fee_lines, JSONArray coupon_lines, JSONArray refunds, Boolean prices_include_tax, Boolean date_paid, Boolean date_paid_gmt, Boolean date_completed, Boolean date_completed_gmt, Boolean prefix, Boolean auffix, Boolean padding, String number, String order_key, String created_via, String version, String status, String currence, String date_created, String date_created_gmt, String date_modified, String date_modified_gmt, String discount_total, String discount_tax, String shipping_tax, String shipping_total, String cart_tax, String total, String total_tax, String customer_ip_address, String customer_user_agent, String customer_note, String billing_fname, String billing_last_name, String billing_company, String billing_address_1, String billing_adddress_2, String billing_city, String billing_state, String billing_postcode, String billing_country, String billing_email, String billing_phone, String shipping_fname, String shipping_last_name, String shipping_company, String shippingbilling_address_1, String shipping_adddress_2, String shipping_city, String shipping_state, String shipping_postcode, String shipping_country, String payment_method, String payment_method_title, String transaction_id, String cart_hash, String meta_data_key, String meta_data_value, String meta_data_value_formatted_number, String meta_data_value_document_type, String line_item_name, String line_item_tax_class, String line_item_subtotal, String line_item_subtotal_tax, String line_item_total, String line_item_total_tax, String sku, String shipping_method_title, String shipping_method_id, String shipping_line_total, String shipping_total_taxes, String shipping_meta_data_key, String shipping_meta_data_value, String links_self_href, String links_collection_href, String links_customer_href, Integer id, Integer parent_id, Integer customer_id, Integer meta_id, Integer line_id, Integer line_quantity, Integer line_product_id, Integer line_variation_id, Integer line_price, Integer shipping_lines_id, Integer shipping_meta_data_id, Integer meta_data_value_number, Integer meta_data_value_order_id) {
         this.line_item_taxes = line_item_taxes;
         this.line_item_meta_data = line_item_meta_data;
         this.tax_lines = tax_lines;
@@ -94,6 +46,9 @@ public class Myorder {
         this.date_paid_gmt = date_paid_gmt;
         this.date_completed = date_completed;
         this.date_completed_gmt = date_completed_gmt;
+        this.prefix = prefix;
+        this.auffix = auffix;
+        this.padding = padding;
         this.number = number;
         this.order_key = order_key;
         this.created_via = created_via;
@@ -140,6 +95,8 @@ public class Myorder {
         this.cart_hash = cart_hash;
         this.meta_data_key = meta_data_key;
         this.meta_data_value = meta_data_value;
+        this.meta_data_value_formatted_number = meta_data_value_formatted_number;
+        this.meta_data_value_document_type = meta_data_value_document_type;
         this.line_item_name = line_item_name;
         this.line_item_tax_class = line_item_tax_class;
         this.line_item_subtotal = line_item_subtotal;
@@ -167,8 +124,9 @@ public class Myorder {
         this.line_price = line_price;
         this.shipping_lines_id = shipping_lines_id;
         this.shipping_meta_data_id = shipping_meta_data_id;
+        this.meta_data_value_number = meta_data_value_number;
+        this.meta_data_value_order_id = meta_data_value_order_id;
     }
-
 
     public JSONArray getLine_item_taxes() {
         return line_item_taxes;
@@ -264,6 +222,30 @@ public class Myorder {
 
     public void setDate_completed_gmt(Boolean date_completed_gmt) {
         this.date_completed_gmt = date_completed_gmt;
+    }
+
+    public Boolean getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(Boolean prefix) {
+        this.prefix = prefix;
+    }
+
+    public Boolean getAuffix() {
+        return auffix;
+    }
+
+    public void setAuffix(Boolean auffix) {
+        this.auffix = auffix;
+    }
+
+    public Boolean getPadding() {
+        return padding;
+    }
+
+    public void setPadding(Boolean padding) {
+        this.padding = padding;
     }
 
     public String getNumber() {
@@ -634,6 +616,22 @@ public class Myorder {
         this.meta_data_value = meta_data_value;
     }
 
+    public String getMeta_data_value_formatted_number() {
+        return meta_data_value_formatted_number;
+    }
+
+    public void setMeta_data_value_formatted_number(String meta_data_value_formatted_number) {
+        this.meta_data_value_formatted_number = meta_data_value_formatted_number;
+    }
+
+    public String getMeta_data_value_document_type() {
+        return meta_data_value_document_type;
+    }
+
+    public void setMeta_data_value_document_type(String meta_data_value_document_type) {
+        this.meta_data_value_document_type = meta_data_value_document_type;
+    }
+
     public String getLine_item_name() {
         return line_item_name;
     }
@@ -848,5 +846,21 @@ public class Myorder {
 
     public void setShipping_meta_data_id(Integer shipping_meta_data_id) {
         this.shipping_meta_data_id = shipping_meta_data_id;
+    }
+
+    public Integer getMeta_data_value_number() {
+        return meta_data_value_number;
+    }
+
+    public void setMeta_data_value_number(Integer meta_data_value_number) {
+        this.meta_data_value_number = meta_data_value_number;
+    }
+
+    public Integer getMeta_data_value_order_id() {
+        return meta_data_value_order_id;
+    }
+
+    public void setMeta_data_value_order_id(Integer meta_data_value_order_id) {
+        this.meta_data_value_order_id = meta_data_value_order_id;
     }
 }

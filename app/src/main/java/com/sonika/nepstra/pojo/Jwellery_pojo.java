@@ -7,18 +7,9 @@ package com.sonika.nepstra.pojo;
 public class Jwellery_pojo {
     public String jwelleryname, jwelleryprice, jwelleryimage, jwellerydesc;
     public Integer jwelleryid;
-    public Integer jwellerycid;
+    public Integer jwellerycid, jwelleryi_id;
 
     public Jwellery_pojo() {
-    }
-
-    public Jwellery_pojo(String jwelleryname, String jwelleryprice, String jwelleryimage, String jwellerydesc, Integer jwelleryid, Integer jwellerycid) {
-        this.jwelleryname = jwelleryname;
-        this.jwelleryprice = jwelleryprice;
-        this.jwelleryimage = jwelleryimage;
-        this.jwellerydesc = jwellerydesc;
-        this.jwelleryid = jwelleryid;
-        this.jwellerycid = jwellerycid;
     }
 
     public String getJwelleryname() {
@@ -67,5 +58,23 @@ public class Jwellery_pojo {
 
     public void setJwellerycid(Integer jwellerycid) {
         this.jwellerycid = jwellerycid;
+    }
+
+    public Integer getJwelleryi_id() {
+        return jwelleryi_id;
+    }
+
+    public void setJwelleryi_id(Integer jwelleryi_id) {
+        this.jwelleryi_id = jwelleryi_id;
+    }
+
+    public Jwellery_pojo(String jwelleryname, String jwelleryprice, String jwelleryimage, String jwellerydesc, Integer jwelleryid, Integer jwellerycid, Integer jwelleryi_id) {
+        this.jwelleryname = jwelleryname;
+        this.jwelleryprice = jwelleryprice;
+        this.jwelleryimage = jwelleryimage;
+        this.jwellerydesc = jwellerydesc;
+        this.jwelleryid = jwelleryid;
+        this.jwellerycid = jwellerycid;
+        this.jwelleryi_id = jwelleryi_id;
     }
 }

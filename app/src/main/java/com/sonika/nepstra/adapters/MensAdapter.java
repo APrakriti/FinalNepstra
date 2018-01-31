@@ -21,6 +21,7 @@ import com.sonika.nepstra.helpers.NewArrivalsHelper;
 import com.sonika.nepstra.helpers.OrderHelper;
 import com.sonika.nepstra.pojo.Mens_pojo;
 import com.sonika.nepstra.pojo.Newarrivals_pojo;
+import com.sonika.nepstra.pojo.OrderedProducts_pojo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class MensAdapter extends BaseAdapter {
     DetailsHelper detailsHelper;
     OrderHelper orderHelper;
     String cname, cprice, cimage,cdesc;
+    Integer cid, imgid;
 
     public MensAdapter(Context context, List<Mens_pojo> mens_pojos, int resource) {
         this.context = context;
@@ -91,7 +93,7 @@ public class MensAdapter extends BaseAdapter {
 
 
         holder.menname.setText("Name:"+" "+orderInfo.getMenname());
-        holder.menprice.setText("Price:" + " "+orderInfo.getMenprice());
+        holder.menprice.setText("A$" + " "+orderInfo.getMenprice());
         Picasso.with(context).load(orderInfo.getMenimage()).into(holder.menimg_product);
 
         holder.btn_men_view_more.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +103,7 @@ public class MensAdapter extends BaseAdapter {
                 cname =mens_pojos.get(i).getMenname();
                 cimage = mens_pojos.get(i).getMenimage();
                 cprice =mens_pojos.get(i).getMenprice();
+                cid = mens_pojos.get(i).getMencid();
 
                 cdesc = mens_pojos.get(i).getMenDesc();
                 ContentValues cv1 = new ContentValues();
@@ -108,6 +111,7 @@ public class MensAdapter extends BaseAdapter {
                 cv1.put("price", cprice);
                 cv1.put("imageone", cimage);
                 cv1.put("desc" , cdesc);
+                cv1.put("c_id" , cid);
                 detailsHelper.insertdetails(cv1);
 
                 Intent intent = new Intent(context , DetailsActivity.class);
@@ -123,11 +127,23 @@ public class MensAdapter extends BaseAdapter {
                 cname =mens_pojos.get(i).getMenname();
                 cimage = mens_pojos.get(i).getMenimage();
                 cprice =mens_pojos.get(i).getMenprice();
+                imgid = mens_pojos.get(i).getMen_i_id();
+
 
                 ContentValues cv = new ContentValues();
+                ArrayList<OrderedProducts_pojo> cartItems = orderHelper.getOrderMessage();
+                for(OrderedProducts_pojo cartItem : cartItems){
+                    if(cartItem.getOrderedcat_id().equals(String.valueOf(imgid))){
+                        cv.put("count",cartItem.count+1);
+                        orderHelper.updateCount(imgid.toString(),cv);
+                        return;
+                    }
+                }
                 cv.put("name", cname);
                 cv.put("price", cprice);
                 cv.put("imageone", cimage);
+                cv.put("cat_id", imgid);
+                cv.put("count", 1);
                 orderHelper.insertOrderInfo(cv);
                 Toast.makeText(context, "added to cart", Toast.LENGTH_SHORT).show();
             }

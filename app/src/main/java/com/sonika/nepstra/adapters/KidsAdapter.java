@@ -22,6 +22,7 @@ import com.sonika.nepstra.helpers.KidsHelper;
 import com.sonika.nepstra.helpers.OrderHelper;
 import com.sonika.nepstra.pojo.Jwellery_pojo;
 import com.sonika.nepstra.pojo.Kids_pojo;
+import com.sonika.nepstra.pojo.OrderedProducts_pojo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class KidsAdapter extends BaseAdapter{
     KidsHelper dbHelper;
     DetailsHelper detailsHelper;
     String cname, cprice, cimage, cdesc;
+    Integer cid, imgid;
     public KidsAdapter(Context context, List<Kids_pojo> kids_pojoListt, int resource) {
         this.context = context;
         this.kids_pojoListt = kids_pojoListt;
@@ -92,7 +94,7 @@ public class KidsAdapter extends BaseAdapter{
 
 
         holder.kidsname.setText("Name:"+" "+orderInfo.getKidsname());
-        holder.kidsprice.setText("Price:" + " "+orderInfo.getKidsprice());
+        holder.kidsprice.setText("A$" + " "+orderInfo.getKidsprice());
         Picasso.with(context).load(orderInfo.getKidsimage()).into(holder.kidsimg_product);
 
         holder.btn_kids_view_more.setOnClickListener(new View.OnClickListener() {
@@ -103,11 +105,13 @@ public class KidsAdapter extends BaseAdapter{
                 cimage = kids_pojoListt.get(i).getKidsimage();
                 cprice = kids_pojoListt.get(i).getKidsprice();
                 cdesc = kids_pojoListt.get(i).getKidsdesc();
+                cid = kids_pojoListt.get(i).getKidscid();
                 ContentValues cv1 = new ContentValues();
                 cv1.put("name", cname);
                 cv1.put("price", cprice);
                 cv1.put("imageone", cimage);
                 cv1.put("desc" , cdesc);
+                cv1.put("c_id" , cid);
                 detailsHelper.insertdetails(cv1);
 
                 Intent intent = new Intent(context , DetailsActivity.class);
@@ -122,10 +126,22 @@ public class KidsAdapter extends BaseAdapter{
                 cname =kids_pojoListt.get(i).getKidsname();
                 cimage = kids_pojoListt.get(i).getKidsimage();
                 cprice =kids_pojoListt.get(i).getKidsprice();
+                imgid = kids_pojoListt.get(i).getKidsi_id();
+
                 ContentValues cv = new ContentValues();
+                ArrayList<OrderedProducts_pojo> cartItems = orderHelper.getOrderMessage();
+                for(OrderedProducts_pojo cartItem : cartItems){
+                    if(cartItem.getOrderedcat_id().equals(String.valueOf(imgid))){
+                        cv.put("count",cartItem.count+1);
+                        orderHelper.updateCount(imgid.toString(),cv);
+                        return;
+                    }
+                }
                 cv.put("name", cname);
                 cv.put("price", cprice);
                 cv.put("imageone", cimage);
+                cv.put("cat_id", imgid);
+                cv.put("count", 1);
                 orderHelper.insertOrderInfo(cv);
                 Toast.makeText(context, "added to cart", Toast.LENGTH_SHORT).show();
             }

@@ -39,6 +39,7 @@ public class WomenAdapter extends BaseAdapter {
     OrderHelper orderHelper;
     DetailsHelper detailsHelper;
     String cname, cimage, cprice, cdesc;
+    Integer catid, imgid;
 
     public WomenAdapter(Context context, List<WomenPoducts_pojo> womenPoductsPojos, int resource) {
         this.context = context;
@@ -92,7 +93,7 @@ public class WomenAdapter extends BaseAdapter {
 
 
         holder.wname.setText("Name:"+" "+orderInfo.getWname());
-        holder.wprice.setText("Price:" + " "+orderInfo.getWprice());
+        holder.wprice.setText("A$" + " "+orderInfo.getWprice());
         Picasso.with(context).load(orderInfo.getWimage()).into(holder.wimg_product);
 
         holder.btn_women_view_more.setOnClickListener(new View.OnClickListener() {
@@ -103,11 +104,14 @@ public class WomenAdapter extends BaseAdapter {
                 cname = womenPoductsPojos.get(i).getWname();
                 cprice = womenPoductsPojos.get(i).getWprice();
                 cdesc = womenPoductsPojos.get(i).getWdesc();
+                catid = womenPoductsPojos.get(i).getCid();
+
                 ContentValues cv1 = new ContentValues();
                 cv1.put("name", cname);
                 cv1.put("price", cprice);
                 cv1.put("imageone", cimage);
                 cv1.put("desc" , cdesc);
+                cv1.put("c_id", catid);
                 detailsHelper.insertdetails(cv1);
 
                 Intent intent = new Intent(context , DetailsActivity.class);
@@ -115,17 +119,31 @@ public class WomenAdapter extends BaseAdapter {
                 Log.e("joker", "lol");
             }
         });
+        assert holder.btn_women_add_to_cart != null;
         holder.btn_women_add_to_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show();
                 cimage = womenPoductsPojos.get(i).getWimage();
                 cname = womenPoductsPojos.get(i).getWname();
                 cprice = womenPoductsPojos.get(i).getWprice();
+                imgid = womenPoductsPojos.get(i).getImg_id();
 
                 ContentValues cv = new ContentValues();
+                ArrayList<OrderedProducts_pojo> cartItems = orderHelper.getOrderMessage();
+                for(OrderedProducts_pojo cartItem : cartItems){
+                    if(cartItem.getOrderedcat_id().equals(String.valueOf(imgid))){
+                        cv.put("count",cartItem.count+1);
+                        orderHelper.updateCount(imgid.toString(),cv);
+                        return;
+                    }
+                }
+
                 cv.put("name", cname);
                 cv.put("price", cprice);
                 cv.put("imageone", cimage);
+                cv.put("cat_id", imgid);
+                cv.put("count", 1);
                 orderHelper.insertOrderInfo(cv);
                 Toast.makeText(context, "added to cart", Toast.LENGTH_SHORT).show();
             }

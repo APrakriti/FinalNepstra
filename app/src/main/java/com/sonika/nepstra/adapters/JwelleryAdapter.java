@@ -22,6 +22,7 @@ import com.sonika.nepstra.helpers.JwelleryHelper;
 import com.sonika.nepstra.helpers.OrderHelper;
 import com.sonika.nepstra.pojo.ArtAndCraft_pojo;
 import com.sonika.nepstra.pojo.Jwellery_pojo;
+import com.sonika.nepstra.pojo.OrderedProducts_pojo;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Connection;
@@ -41,6 +42,7 @@ public class JwelleryAdapter extends BaseAdapter{
     OrderHelper orderHelper;
     DetailsHelper detailsHelper;
     String cname, cprice, cimage,cdesc;
+    Integer cid, i_id;
     public JwelleryAdapter(Context context, List<Jwellery_pojo> jwellery_pojoList, int resource) {
         this.context = context;
         this.jwellery_pojoList = jwellery_pojoList;
@@ -94,7 +96,7 @@ public class JwelleryAdapter extends BaseAdapter{
 
 
         holder.jwelleryname.setText("Name:"+" "+orderInfo.getJwelleryname());
-        holder.jwelleryprice.setText("Price:" + " "+orderInfo.getJwelleryprice());
+        holder.jwelleryprice.setText("A$" + " "+orderInfo.getJwelleryprice());
         Picasso.with(context).load(orderInfo.getJwelleryimage()).into(holder.jwelleryimg_product);
 
 
@@ -106,11 +108,13 @@ public class JwelleryAdapter extends BaseAdapter{
                 cimage = jwellery_pojoList.get(i).getJwelleryimage();
                 cprice = jwellery_pojoList.get(i).getJwelleryprice();
                 cdesc = jwellery_pojoList.get(i).getJwellerydesc();
+                cid = jwellery_pojoList.get(i).getJwellerycid();
                 ContentValues cv1 = new ContentValues();
                 cv1.put("name", cname);
                 cv1.put("price", cprice);
                 cv1.put("imageone", cimage);
                 cv1.put("desc" , cdesc);
+                cv1.put("c_id" , cid);
                 detailsHelper.insertdetails(cv1);
 
                 Intent intent = new Intent(context , DetailsActivity.class);
@@ -125,10 +129,22 @@ public class JwelleryAdapter extends BaseAdapter{
                 cname = jwellery_pojoList.get(i).getJwelleryname();
                 cimage = jwellery_pojoList.get(i).getJwelleryimage();
                 cprice = jwellery_pojoList.get(i).getJwelleryprice();
+                i_id = jwellery_pojoList.get(i).getJwelleryi_id();
+
                 ContentValues cv = new ContentValues();
+                ArrayList<OrderedProducts_pojo> cartItems = orderHelper.getOrderMessage();
+                for(OrderedProducts_pojo cartItem : cartItems){
+                    if(cartItem.getOrderedcat_id().equals(String.valueOf(i_id))){
+                        cv.put("count",cartItem.count+1);
+                        orderHelper.updateCount(i_id.toString(),cv);
+                        return;
+                    }
+                }
                 cv.put("name", cname);
                 cv.put("price", cprice);
                 cv.put("imageone", cimage);
+                cv.put("cat_id", i_id);
+                cv.put("count", 1);
                 orderHelper.insertOrderInfo(cv);
                 Toast.makeText(context, "added to cart", Toast.LENGTH_SHORT).show();
             }

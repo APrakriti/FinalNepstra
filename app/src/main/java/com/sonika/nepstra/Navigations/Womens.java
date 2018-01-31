@@ -48,6 +48,7 @@ public class Womens extends AppCompatActivity {
     }
 
     private void showWomenProducts() {
+
         womenPoductsList = dbhelper.getwomen();
         for (int i = 0; i < womenPoductsList.size(); i++) {
             final WomenPoducts_pojo info = womenPoductsList.get(i);
@@ -61,6 +62,7 @@ public class Womens extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem menuItem = menu.findItem(R.id.action_shop);
+
         cartlist = orderHelper.getOrderMessage();
 
         int mCount = cartlist.size();

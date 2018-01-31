@@ -23,6 +23,7 @@ public class KidsHelper extends SQLiteOpenHelper {
     String KIDS_TABLE = "CREATE TABLE if not exists `kids`  (\n" +
             "                       `id` INTEGER PRIMARY KEY ,\n" +
             "                       `c_id` INTEGER,\n" +
+            "                       `i_id` INTEGER,\n" +
             "                       `name` TEXT,\n" +
             "                       `price` TEXT,\n" +
             "                       `imageone` TEXT\n" +
@@ -44,6 +45,11 @@ public class KidsHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
+    public  void  deleteKids()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from kids");
+    }
     public void insertkids(ContentValues cv) {
         getWritableDatabase().insert("kids", "", cv);
         Log.e("poker", "yes");
@@ -61,6 +67,7 @@ public class KidsHelper extends SQLiteOpenHelper {
             Kids_pojo orderinfo = new Kids_pojo();
             orderinfo.kidsid = cursor.getInt(cursor.getColumnIndex("id"));
             orderinfo.kidscid = cursor.getInt(cursor.getColumnIndex("c_id"));
+            orderinfo.kidsi_id = cursor.getInt(cursor.getColumnIndex("i_id"));
             orderinfo.kidsname= cursor.getString(cursor.getColumnIndex("name"));
             orderinfo.kidsprice = cursor.getString(cursor.getColumnIndex("price"));
             orderinfo.kidsimage = cursor.getString(cursor.getColumnIndex("imageone"));

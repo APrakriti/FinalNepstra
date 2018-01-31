@@ -1,7 +1,9 @@
 package com.sonika.nepstra.fragments;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -20,6 +23,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +38,7 @@ import com.sonika.nepstra.helpers.OrderHelper;
 import com.sonika.nepstra.parser.JsonParserA;
 import com.sonika.nepstra.pojo.AllProducts;
 import com.sonika.nepstra.pojo.OrderedProducts_pojo;
+import com.synnapps.carouselview.CarouselView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +50,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class All_products_fragment extends Fragment
-        implements SearchView.OnQueryTextListener,SearchView.OnCloseListener  {
+        implements SearchView.OnQueryTextListener,SearchView.OnCloseListener {
     int flag = 0;
     RecyclerView mRecyclerView;
     List<AllProducts> allProductList = new ArrayList<AllProducts>();
@@ -52,24 +59,32 @@ public class All_products_fragment extends Fragment
     List<OrderedProducts_pojo> cartlist = new ArrayList<>();
     AllProductAdapter allProductAdapter = null;
     SearchView search;
+    CarouselView carouselView;
+    ScrollView scrollViewa;
     List<AllProducts> savedList=new ArrayList<>();
-
+    InputMethodManager imm;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_all_products, container, false);
+        imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         orderHelper = new OrderHelper(getContext());
         allProductAdapter = new AllProductAdapter(getContext(), allProductList );
         search= v.findViewById(R.id.search_it);
+        carouselView = v.findViewById(R.id.carouselview);
+        scrollViewa = v.findViewById(R.id.scroll_viewa);
         search.setQueryHint("Search");
         setHasOptionsMenu(true);
         search.setOnQueryTextListener(this);
         search.setOnCloseListener(this);
         search.setInputType(InputType.TYPE_CLASS_TEXT);
-        search.requestFocus();
+
+//        v.findViewById(R.id.carouselview).requestFocus();
+
+
         perform(v);
         return v;
     }
@@ -81,6 +96,8 @@ public class All_products_fragment extends Fragment
 
     @Override
     public boolean onClose() {
+
+        carouselView.setVisibility(View.VISIBLE);
         filterData("");
         // expandAll();
         return false;
@@ -88,7 +105,16 @@ public class All_products_fragment extends Fragment
 
     @Override
     public boolean onQueryTextChange(String query) {
-        filterData(query);
+
+        if (query.isEmpty() == false)
+        {
+            carouselView.setVisibility(View.GONE);
+        }
+        else {
+            carouselView.setVisibility(View.VISIBLE);
+      }
+          filterData(query);
+
         // alladapter.filter(query);
         //displayList();
         return false;
@@ -96,25 +122,30 @@ public class All_products_fragment extends Fragment
 
     @Override
     public boolean onQueryTextSubmit(String newText) {
+
+        carouselView.setVisibility(View.VISIBLE);
         filterData(newText);
         // displayList();
         return false;
     }
     public void filterData(String charText){
         charText = charText.toLowerCase(Locale.getDefault());
+
         allProductList.clear();
 
         if (charText.length() == 0) {
+
             allProductList.addAll(savedList);
         } else {
-            for (AllProducts wp : savedList) {
-                if (wp.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    allProductList.add(wp);
 
-                    Log.e("LIst",wp.getName()+""+charText+allProductList.size()+allProductList.get(0).getName());
+                for (AllProducts wp : savedList) {
+                if (wp.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
+
+                    allProductList.add(wp);
                 }
             }
-        }
+             }
+
         allProductAdapter.notifyDataSetChanged();
     }
 
@@ -148,8 +179,6 @@ public class All_products_fragment extends Fragment
 
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
                         for (int i = 0; i < jsonArray.length(); i++) {
-                            Log.e("forkatichoti", "khaikhai");
-
                             JSONObject dataObject = jsonArray.getJSONObject(i);
 
                             Integer id = dataObject.getInt("id");
@@ -236,7 +265,7 @@ public class All_products_fragment extends Fragment
                                 c_id = categories_array.getJSONObject(j).getInt("id");
                                 c_name = categories_array.getJSONObject(j).getString("name");
                                 c_slug = categories_array.getJSONObject(j).getString("slug");
-                                Log.e("catogory", "catogory");
+
                             }
 
                             JSONArray tags = dataObject.getJSONArray("tags");
@@ -335,7 +364,6 @@ public class All_products_fragment extends Fragment
                 mRecyclerView.setHasFixedSize(true);
                 mRecyclerView.setNestedScrollingEnabled(false);
 
-                Log.e("rrrrrrrrrrrrr", String.valueOf(allProductList.size()));
 
                 allProductAdapter = new AllProductAdapter(getContext(), allProductList);
                 mRecyclerView.setAdapter(allProductAdapter);

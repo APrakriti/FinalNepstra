@@ -23,6 +23,7 @@ public class MensHelper extends SQLiteOpenHelper {
     String MEN_TABLE = "CREATE TABLE if not exists `mens`  (\n" +
             "                       `id` INTEGER PRIMARY KEY ,\n" +
             "                       `c_id` INTEGER,\n" +
+            "                       `i_id` INTEGER,\n" +
             "                       `name` TEXT,\n" +
             "                       `price` TEXT,\n" +
             "                       `imageone` TEXT\n" +
@@ -44,6 +45,11 @@ public class MensHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
+    public  void  deleteMen()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from mens");
+    }
     public void insertmen(ContentValues cv) {
         getWritableDatabase().insert("mens", "", cv);
         Log.e("poker", "yes");
@@ -61,6 +67,7 @@ public class MensHelper extends SQLiteOpenHelper {
             Mens_pojo orderinfo = new Mens_pojo();
             orderinfo.menid = cursor.getInt(cursor.getColumnIndex("id"));
             orderinfo.mencid = cursor.getInt(cursor.getColumnIndex("c_id"));
+            orderinfo.men_i_id = cursor.getInt(cursor.getColumnIndex("i_id"));
             orderinfo.menname = cursor.getString(cursor.getColumnIndex("name"));
             orderinfo.menprice = cursor.getString(cursor.getColumnIndex("price"));
             orderinfo.menimage = cursor.getString(cursor.getColumnIndex("imageone"));

@@ -4,13 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:id="@+id/scroll_viewa">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/rootview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:focusableInTouchMode="true">
 
         <SearchView
             android:id="@+id/search_it"
@@ -21,8 +25,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:focusable="true"
             android:background="@drawable/thin_black_rectangular_border"
+            android:focusable="true"
             android:focusableInTouchMode="true"
             android:iconifiedByDefault="false"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,16 +37,20 @@
             android:id="@+id/carouselview"
             android:layout_width="0dp"
             android:layout_height="200dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="@+id/search_it"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="@+id/search_it"
             app:layout_constraintTop_toBottomOf="@+id/search_it" />
 
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view2"
-            android:layout_width="0dp"
+            android:layout_width="364dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="52dp"
             android:fadeScrollbars="false"
             android:orientation="vertical"
             android:paddingBottom="8dp"
@@ -50,9 +58,14 @@
             android:paddingRight="0dp"
             android:paddingTop="8dp"
             android:scrollbars="none"
-            app:layout_constraintEnd_toEndOf="@+id/carouselview"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/carouselview"
-            app:layout_constraintTop_toBottomOf="@+id/carouselview" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/carouselview"
+            app:layout_constraintVertical_bias="0.0" />
     </android.support.constraint.ConstraintLayout>
+
 </ScrollView>

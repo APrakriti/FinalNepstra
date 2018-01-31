@@ -8,18 +8,9 @@ public class Sports_pojo {
 
     public String sportsname, sportsprice, sportsimage, sportsdesc;
     public Integer sportsid;
-    public Integer sportscid;
+    public Integer sportscid, img_id;
 
     public Sports_pojo() {
-    }
-
-    public Sports_pojo(String sportsname, String sportsprice, String sportsimage, String sportsdesc, Integer sportsid, Integer sportscid) {
-        this.sportsname = sportsname;
-        this.sportsprice = sportsprice;
-        this.sportsimage = sportsimage;
-        this.sportsdesc = sportsdesc;
-        this.sportsid = sportsid;
-        this.sportscid = sportscid;
     }
 
     public String getSportsname() {
@@ -68,6 +59,24 @@ public class Sports_pojo {
 
     public void setSportscid(Integer sportscid) {
         this.sportscid = sportscid;
+    }
+
+    public Integer getImg_id() {
+        return img_id;
+    }
+
+    public void setImg_id(Integer img_id) {
+        this.img_id = img_id;
+    }
+
+    public Sports_pojo(String sportsname, String sportsprice, String sportsimage, String sportsdesc, Integer sportsid, Integer sportscid, Integer img_id) {
+        this.sportsname = sportsname;
+        this.sportsprice = sportsprice;
+        this.sportsimage = sportsimage;
+        this.sportsdesc = sportsdesc;
+        this.sportsid = sportsid;
+        this.sportscid = sportscid;
+        this.img_id = img_id;
     }
 }
 

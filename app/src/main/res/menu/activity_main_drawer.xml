@@ -24,7 +24,7 @@
             android:icon="@drawable/btn_jewellery"
             />
         <item
-            android:id="@+id/nav_books"
+            android:id="@+id/nav_kids"
             android:title="Kids"
             android:icon="@drawable/btn_books"
             />
@@ -39,25 +39,24 @@
             android:title="Arts &amp; Craft"
             android:icon="@drawable/btn_arts"
             />
+
         <item
-            android:id="@+id/nav_category"
-            android:title="Category"
-            android:icon="@drawable/btn_catagory"/>
-        <item
-            android:id="@+id/nav_contact"
-            android:title="Contacts"
+            android:id="@+id/nav_books"
+            android:title="Books"
             android:icon="@drawable/btn_contact_us"
             />
         <item
-            android:id="@+id/nav_about_us"
-            android:title="About Us"
+            android:id="@+id/nav_login"
+            android:title="Login"
             android:icon="@drawable/btn_about"
             />
+
         <item
             android:id="@+id/nav_my_orders"
             android:title="My Orders"
             android:icon="@drawable/btn_about"
             />
+
     </group>
 
 

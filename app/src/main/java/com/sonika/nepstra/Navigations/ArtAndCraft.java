@@ -37,6 +37,8 @@ public class ArtAndCraft extends AppCompatActivity {
     OrderHelper orderHelper;
     List<OrderedProducts_pojo> cartlist = new ArrayList<>();
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -3,12 +3,14 @@ package com.sonika.nepstra;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -20,6 +22,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarTab;
+import com.roughike.bottombar.OnTabSelectListener;
 import com.sonika.nepstra.Paypal.PaypalActivity;
 
 import org.json.JSONException;
@@ -30,8 +35,9 @@ import java.util.Map;
 
 public class LoginVolley extends AppCompatActivity {
     EditText email, password;
-    String semail, spassword, shemail;
-    Button btnRegister, login;
+    String semail, spassword;
+    TextView forgetPassword;
+    Button login;
     ProgressDialog mprogressDialog;
     SharedPreferences loginpref;
 
@@ -43,6 +49,16 @@ public class LoginVolley extends AppCompatActivity {
         email = (EditText) findViewById(R.id.lbl_username_login);
         password = (EditText) findViewById(R.id.lbl_password_login);
         login = (Button) findViewById(R.id.btn_login_login);
+        forgetPassword = findViewById(R.id.txt_forgot_password);
+
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(LoginVolley.this, ForgetPwd.class);
+                startActivity(i);
+
+            }
+        });
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,7 +69,7 @@ public class LoginVolley extends AppCompatActivity {
                     Toast.makeText(LoginVolley.this, "Please, fill all the fields! ", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.e("Tag", "signupPrakriti");
-                    mprogressDialog= new ProgressDialog(LoginVolley.this);
+                    mprogressDialog = new ProgressDialog(LoginVolley.this);
                     mprogressDialog.setMessage("Loading...");
 
                     mprogressDialog.show();
@@ -61,84 +77,50 @@ public class LoginVolley extends AppCompatActivity {
                     RequestQueue queue = Volley.newRequestQueue(LoginVolley.this);
 
 
-
-                  StringRequest sr = new StringRequest(Request.Method.POST, "https://nepstra.com/api/android/verifyuser.php?email="+semail+"&pass="+spassword,
-// +
-//                            "email="+semail +
-//                            "pass="+spassword,
-                          //  https://nepstra.com/api/android/verifyuser.php/?email=send_correct_user&pass=send_correct_password
-                          //  http://nepstra.com/api/android/verifyuser.php?email=email&pass=password
-                           // https://nepstra.com/api/android/verifyuser.php/?user=send_correct_user&pass=send_correct_password
+                    StringRequest sr = new StringRequest(Request.Method.POST,
+                            "https://nepstra.com/api/android/verifyuser.php?email=" + semail + "&pass=" + spassword,
+                            //  https://nepstra.com/api/android/verifyuser.php/?email=send_correct_user&pass=send_correct_password
+                            //  http://nepstra.com/api/android/verifyuser.php?email=email&pass=password
+                            // https://nepstra.com/api/android/verifyuser.php/?user=send_correct_user&pass=send_correct_password
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                  Log.e("response", response);
+                                    Log.e("response", response);
                                     try {
                                         JSONObject jsonObject = new JSONObject(response);
                                         Log.e("simi", "monkey");
                                         String status = jsonObject.getString("status");
-                                        String message = jsonObject.getString("message");
-//                                        Integer data = jsonObject.getInt(String.valueOf(1)); //yo k gareko?? data =
-//yo email add xa tei ni eror akoxa
-                                        Log.e("status",status);
+//                                        String message = jsonObject.getString("message");
+////                                      Integer data = jsonObject.getInt(String.valueOf(1)); //yo k gareko?? data =
+                                        Log.e("status", status);
+
                                         loginpref = getSharedPreferences("LOGINPREF", MODE_PRIVATE);
                                         SharedPreferences.Editor loginedit = loginpref.edit();
 
-
-                                        if(status.equals("success")){
+                                        if (status.equals("success")) {
                                             Intent i = new Intent(LoginVolley.this, MainActivity.class);
                                             startActivity(i);
-                                            shemail = email.getText().toString();
-                                            loginpref = getSharedPreferences("LOGINPREF", MODE_PRIVATE);
-                                            SharedPreferences.Editor editor = loginpref.edit();
-                                            editor.putString("spemail",shemail);
-                                            editor.apply();
-                                            editor.commit();
                                             loginedit.putBoolean("login", true);
-                                           }
-
-
-                                         else if (status.equals("error")) {
+                                            loginedit.putString("email", semail);
+                                            loginedit.commit();
+                                        } else if (status.equals("error")) {
                                             loginedit.putBoolean("login", false);
                                             loginedit.commit();
                                             Toast.makeText(LoginVolley.this, "Wrong email adddress", Toast.LENGTH_SHORT).show();
                                         }
-                                        //check what is this status ??? you are getting.ok?
 
-                                    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                    catch (JSONException e) {
+                                    } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-
 
 
                                     //  msgResponse.setText(response.toString());
 
                                     mprogressDialog.hide();
 
-                                   Log.e("HttpClientlogin", "success! response: " + response.toString());
-                                }},
+                                    Log.e("HttpClientlogin", "success! response: " + response.toString());
+                                }
+                            },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
@@ -180,5 +162,50 @@ public class LoginVolley extends AppCompatActivity {
                     queue.add(sr);
 
 
-                }}});}}
+                }
+            }
+        });
+
+        final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        BottomBarTab dummy = bottomBar.getTabWithId(R.id.tab_dummy);
+        dummy.setVisibility(View.GONE);
+
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelected(@IdRes int tabId) {
+                switch (tabId) {
+                    case R.id.tab_dummy:
+                        break;
+
+                    case R.id.tab_home:
+                        Intent intentHome = new Intent(LoginVolley.this, MainActivity.class);
+                        startActivity(intentHome);
+
+
+                        break;
+
+
+                    case R.id.tab_products:
+                        Intent iiproducts = new Intent(LoginVolley.this, CategoriesActivity.class);
+                        startActivity(iiproducts);
+
+
+                        break;
+                    case R.id.tab_order:
+                        Intent intentOrder = new Intent(LoginVolley.this, OrderedProducts.class);
+                        startActivity(intentOrder);
+
+                        break;
+                    case R.id.tab_account:
+                        Toast.makeText(LoginVolley.this, "Account", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+        });
+    }
+}
+
 

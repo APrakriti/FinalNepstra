@@ -351,32 +351,31 @@
             app:layout_constraintTop_toBottomOf="@+id/cb_create_account" />
 
 
-
-
         <EditText
             android:id="@+id/lbl_password"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="38dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/thin_red_rectangular_border"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="Enter password"
+            android:inputType="textPersonName"
             android:paddingLeft="4dp"
             app:layout_constraintEnd_toEndOf="@+id/lbl_email_address"
             app:layout_constraintStart_toStartOf="@+id/lbl_email_address"
             app:layout_constraintTop_toBottomOf="@+id/cb_ship_to_different_address" />
 
 
-
-
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraint_layout_ship"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/lbl_password"
+            android:layout_width="363dp"
+            android:layout_height="535dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="8dp">
+            app:layout_constraintTop_toBottomOf="@id/lbl_password">
 
 
             <LinearLayout
@@ -441,10 +440,10 @@
                     android:layout_weight="1"
                     android:background="@drawable/thin_red_rectangular_border"
                     android:ems="10"
-                    android:inputType="textPersonName"
-                    />
+                    android:inputType="textPersonName" />
 
             </LinearLayout>
+
             <TextView
                 android:id="@+id/txt_company_name_ship"
                 android:layout_width="wrap_content"
@@ -482,9 +481,9 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="4dp"
+                android:background="@drawable/thin_red_rectangular_border"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:background="@drawable/thin_red_rectangular_border"
                 app:layout_constraintEnd_toEndOf="@+id/lbl_company_name_ship"
                 app:layout_constraintStart_toStartOf="@+id/lbl_company_name_ship"
                 app:layout_constraintTop_toBottomOf="@+id/txt_country_ship" />
@@ -504,11 +503,11 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="4dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="House number and street name"
-                android:paddingLeft="4dp"
                 android:background="@drawable/thin_red_rectangular_border"
+                android:ems="10"
+                android:hint="House number and street name"
+                android:inputType="textPersonName"
+                android:paddingLeft="4dp"
                 app:layout_constraintEnd_toEndOf="@+id/lbl_country_ship"
                 app:layout_constraintStart_toStartOf="@+id/lbl_country_ship"
                 app:layout_constraintTop_toBottomOf="@+id/txt_street_address_ship" />
@@ -521,8 +520,8 @@
                 android:background="@drawable/thin_red_rectangular_border"
                 android:ems="10"
                 android:hint="Apartment, suite, unit etc.(optional)"
-                android:paddingLeft="4dp"
                 android:inputType="textPersonName"
+                android:paddingLeft="4dp"
                 app:layout_constraintEnd_toEndOf="@+id/lbl_house_no_ship"
                 app:layout_constraintStart_toStartOf="@+id/lbl_house_no_ship"
                 app:layout_constraintTop_toBottomOf="@+id/lbl_house_no_ship" />
@@ -542,9 +541,9 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="4dp"
+                android:background="@drawable/thin_red_rectangular_border"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:background="@drawable/thin_red_rectangular_border"
                 app:layout_constraintEnd_toEndOf="@+id/lbl_apartment_suite_ship"
                 app:layout_constraintStart_toStartOf="@+id/lbl_apartment_suite_ship"
                 app:layout_constraintTop_toBottomOf="@+id/txt_town_city_ship" />
@@ -564,9 +563,9 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="4dp"
+                android:background="@drawable/thin_red_rectangular_border"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:background="@drawable/thin_red_rectangular_border"
                 app:layout_constraintEnd_toEndOf="@+id/lbl_town_city_ship"
                 app:layout_constraintStart_toStartOf="@+id/lbl_town_city_ship"
                 app:layout_constraintTop_toBottomOf="@+id/txt_state_zone_ship" />
@@ -586,9 +585,9 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="4dp"
+                android:background="@drawable/thin_red_rectangular_border"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:background="@drawable/thin_red_rectangular_border"
                 app:layout_constraintEnd_toEndOf="@+id/lbl_town_city_ship"
                 app:layout_constraintStart_toStartOf="@+id/lbl_state_zone_ship"
                 app:layout_constraintTop_toBottomOf="@+id/txt_postcode_zip_ship" />
@@ -605,27 +604,25 @@
 
             <EditText
                 android:id="@+id/lbl_order_notes_ship"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_width="332dp"
+                android:layout_height="39dp"
                 android:layout_marginTop="4dp"
+                android:background="@drawable/thin_red_rectangular_border"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:background="@drawable/thin_red_rectangular_border"
                 app:layout_constraintEnd_toEndOf="@+id/lbl_state_zone_ship"
                 app:layout_constraintStart_toStartOf="@+id/lbl_state_zone_ship"
                 app:layout_constraintTop_toBottomOf="@+id/txt_order_notes_ship" />
 
 
+
+
         </android.support.constraint.ConstraintLayout>
-
-
-
 
         <Button
             android:id="@+id/btn_place_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:background="@drawable/rounded_red_button_designs"
             android:paddingLeft="64dp"
             android:paddingRight="64dp"
@@ -634,12 +631,77 @@
             android:textColor="@color/colorWhite"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/lbl_email_address"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="@+id/lbl_email_address"
-            app:layout_constraintTop_toBottomOf="@+id/constraint_layout_ship" />
+            app:layout_constraintTop_toBottomOf="@+id/radioSex" />
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Pay with:"
+            android:textColor="@color/colorAppBlack"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraint_layout_ship"
+            android:layout_marginLeft="16dp" />
 
+        <RadioGroup
+            android:id="@+id/radioSex"
+            android:layout_width="384dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="36dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6">
 
+            <RadioButton
+                android:id="@+id/radioButtonPaypal"
+                android:layout_width="157dp"
+                android:layout_marginEnd="274dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="274dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="8dp"
+                android:text="Paypal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView6"
+                android:layout_height="wrap_content" />
+
+            <RadioButton
+                android:id="@+id/radioButtonDirectBank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="36dp"
+                android:layout_marginStart="36dp"
+                android:text="Direct Bank Transfer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radioButton5" />
+
+            <RadioButton
+                android:id="@+id/radioButtonCash"
+                android:layout_width="285dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="211dp"
+                android:layout_marginLeft="36dp"
+                android:layout_marginRight="211dp"
+                android:layout_marginStart="36dp"
+                android:text="Cash On Delivery"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radioButton7" />
+
+        </RadioGroup>
     </android.support.constraint.ConstraintLayout>
+
 
 
 

@@ -23,6 +23,7 @@ public class SportsHelper extends SQLiteOpenHelper {
     String SPORTS_TABLE = "CREATE TABLE if not exists `sports`  (\n" +
             "                       `id` INTEGER PRIMARY KEY ,\n" +
             "                       `c_id` INTEGER,\n" +
+            "                       `i_id` INTEGER,\n" +
             "                       `name` TEXT,\n" +
             "                       `price` TEXT,\n" +
             "                       `desc` TEXT,\n" +
@@ -48,7 +49,11 @@ public class SportsHelper extends SQLiteOpenHelper {
         Log.e("sportsinsertvaeraxa", "yes");
 
     }
-
+    public  void  deleteSports()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from sports");
+    }
     public ArrayList<Sports_pojo> getsports() {
         Log.e("getsportMessage", "vaeraxa");
         String sql = "select * from sports";
@@ -60,6 +65,7 @@ public class SportsHelper extends SQLiteOpenHelper {
             Sports_pojo sports = new Sports_pojo();
             sports.sportsid = cursor.getInt(cursor.getColumnIndex("id"));
             sports.sportscid = cursor.getInt(cursor.getColumnIndex("c_id"));
+            sports.img_id = cursor.getInt(cursor.getColumnIndex("i_id"));
             sports.sportsname = cursor.getString(cursor.getColumnIndex("name"));
             sports.sportsprice = cursor.getString(cursor.getColumnIndex("price"));
             sports.sportsimage = cursor.getString(cursor.getColumnIndex("imageone"));

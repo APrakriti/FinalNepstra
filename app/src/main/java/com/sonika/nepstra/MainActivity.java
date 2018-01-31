@@ -1,16 +1,10 @@
 package com.sonika.nepstra;
 
-import android.app.SearchManager;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
-import android.view.MenuInflater;
+import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,73 +12,114 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.roughike.bottombar.BottomBar;
 import com.sonika.nepstra.Navigations.ArtAndCraft;
+import com.sonika.nepstra.Navigations.Books;
 import com.sonika.nepstra.Navigations.Jwellery;
 import com.sonika.nepstra.Navigations.Kids;
 import com.sonika.nepstra.Navigations.Mens;
 import com.sonika.nepstra.Navigations.NewArrival;
 import com.sonika.nepstra.Navigations.Sports;
 import com.sonika.nepstra.Navigations.Womens;
-import com.sonika.nepstra.adapters.MyOrderAdpater;
-
-import com.sonika.nepstra.helpers.MySharedPreference;
-import com.sonika.nepstra.listener.ListViewListener;
-import com.sonika.nepstra.pojo.AllProducts;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     CarouselView carouselview;
-    MySharedPreference sharedPreference;
-    ArrayAdapter<CharSequence> adapter;
-    BottomBar bottomBar;
-    ViewPager viewPager;
+    String useremail;
+    TextView mloginemail;
+    SearchView searchView;
+    ConstraintLayout root;
+    ActionBarDrawerToggle toggle;
+    DrawerLayout drawer;
+    Toolbar toolbar;
     int[] images = {R.drawable.nepstrab, R.drawable.nepstraa, R.drawable.nepstrac};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("LOGINPREF", MODE_PRIVATE);
+        useremail = sharedPreferences.getString("email", null);
+        //Log.e("mmpemail", useremail);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
 
+        if (sharedPreferences.getBoolean("login", false)) {
+            View view = navigationView.getHeaderView(0);
+            mloginemail = (TextView) view.findViewById(R.id.tv_useremail);
+            mloginemail.setText(useremail);
+        }
+
+
         carouselview = (CarouselView) findViewById(R.id.carouselview);
+        searchView = (SearchView) findViewById(R.id.search_it);
+        root = (ConstraintLayout) findViewById(R.id.rootview);
         carouselview.setPageCount(images.length);
         carouselview.setImageListener(imagelistener);
+
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+//                Toast.makeText(MainActivity.this, "hihihi", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+                InputMethodManager inputMethodManager = (InputMethodManager)  MainActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(), 0);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+//                Toast.makeText(MainActivity.this, "hihihi", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+//                Toast.makeText(MainActivity.this, "hihihi", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            int count = getFragmentManager().getBackStackEntryCount();
+            if (count == 0) {
+                super.onBackPressed();
+                //additional code
+            } else {
+                getFragmentManager().popBackStack();
+            }
         }
     }
+
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
@@ -117,6 +152,12 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        searchView.setQuery("", false);
+        // root.requestFocus();
+    }
 //        @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
 //        int id = item.getItemId();
@@ -127,7 +168,7 @@ public class MainActivity extends AppCompatActivity
 //            return super.onOptionsItemSelected(item);
 //    }
 
-//    @SuppressWarnings("StatementWithEmptyBody")
+    //    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -140,61 +181,53 @@ public class MainActivity extends AppCompatActivity
             Intent i = new Intent(MainActivity.this, Mens.class);
             startActivity(i);
 
-        } else if (id == R.id.nav_womens)
-        {
+        } else if (id == R.id.nav_my_orders) {
+            SharedPreferences loginpref = getSharedPreferences("LOGINPREF", MODE_PRIVATE);
+            Intent i = null;
+
+            if (loginpref.getBoolean("login", false)) {
+                i = new Intent(MainActivity.this, MyOrders.class);
+                startActivity(i);
+            } else {
+                Toast.makeText(this, "you must login first", Toast.LENGTH_SHORT).show();
+            }
+        } else if (id == R.id.nav_womens) {
             Intent i = new Intent(MainActivity.this, Womens.class);
             startActivity(i);
-
-        } else if (id == R.id.nav_contact) {
-
-        } else if (id == R.id.nav_category) {
 
         } else if (id == R.id.nav_arts_and_craft) {
 
             Intent i = new Intent(MainActivity.this, ArtAndCraft.class);
             startActivity(i);
 
-        }
-        else if (id == R.id.nav_my_orders) {
-            SharedPreferences loginpref = getSharedPreferences("LOGINPREF", MODE_PRIVATE);
-            Intent i = null;
-
-
-            if (loginpref.getBoolean("login", true))
-            { Log.e("login", "myorder");
-                i = new Intent(MainActivity.this, MyOrders.class);
-                startActivity(i);
-            }
-            else
-            {
-                Toast.makeText(this, "you must login first", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-
-        else if (id == R.id.nav_about_us) {
+        } else if (id == R.id.nav_login) {
             Intent intentAboutUs = new Intent(this, LoginVolley.class);
             startActivity(intentAboutUs);
 
-        }
-        else if (id == R.id.nav_books) {
+        } else if (id == R.id.nav_kids) {
+            Intent intentAboutUs = new Intent(this, Kids.class);
+            startActivity(intentAboutUs);
 
-            Intent i = new Intent(MainActivity.this, Kids.class);
+        } else if (id == R.id.nav_books) {
+
+            Intent i = new Intent(MainActivity.this, Books.class);
             startActivity(i);
 
-        }
-        else if (id == R.id.nav_jewellry) {
+        } else if (id == R.id.nav_jewellry) {
             Intent i = new Intent(this, Jwellery.class);
             startActivity(i);
-        }
-        else if (id == R.id.nav_sports) {
+        } else if (id == R.id.nav_sports) {
             Intent i = new Intent(this, Sports.class);
             startActivity(i);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+
+//
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
+
 
 }

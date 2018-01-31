@@ -23,6 +23,7 @@ import com.sonika.nepstra.helpers.NewArrivalsHelper;
 import com.sonika.nepstra.helpers.OrderHelper;
 import com.sonika.nepstra.pojo.ArtAndCraft_pojo;
 import com.sonika.nepstra.pojo.Newarrivals_pojo;
+import com.sonika.nepstra.pojo.OrderedProducts_pojo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class ArtAndCraftAdapter extends BaseAdapter {
     DetailsHelper detailsHelper;
     OrderHelper orderHelper;
     String aname, aprice, aimage, adesc;
+    Integer cid, i_id;
     public ArtAndCraftAdapter(Context context, List<ArtAndCraft_pojo> artAndCraft_pojos, int resource) {
         this.context = context;
         this.artAndCraft_pojos = artAndCraft_pojos;
@@ -92,10 +94,11 @@ public class ArtAndCraftAdapter extends BaseAdapter {
         //holder.orderid.setText(orderInfo.getOrderid().toString());
 
 
-        holder.artname.setText("Name:"+" "+orderInfo.getArtname());
-        holder.artprice.setText("Price:" + " "+orderInfo.getArtprice());
-        Picasso.with(context).load(orderInfo.getArtimage()).into(holder.artimg_product);
 
+
+            holder.artname.setText("Name:" + " " + orderInfo.getArtname());
+            holder.artprice.setText("A$" + " " + orderInfo.getArtprice());
+            Picasso.with(context).load(orderInfo.getArtimage()).into(holder.artimg_product);
 
 
         holder.btn_art_view_more.setOnClickListener(new View.OnClickListener() {
@@ -106,11 +109,13 @@ public class ArtAndCraftAdapter extends BaseAdapter {
                 aimage = artAndCraft_pojos.get(i).getArtimage();
                 aprice = artAndCraft_pojos.get(i).getArtprice();
                 adesc = artAndCraft_pojos.get(i).getArtdesc();
+                cid  = artAndCraft_pojos .get(i).getArtcid();
                 ContentValues cv1 = new ContentValues();
                 cv1.put("name", aname);
                 cv1.put("price", aprice);
                 cv1.put("imageone", aimage);
                 cv1.put("desc" , adesc);
+                cv1.put("c_id", cid);
                 detailsHelper.insertdetails(cv1);
 
                 Intent intent = new Intent(context , DetailsActivity.class);
@@ -125,11 +130,23 @@ public class ArtAndCraftAdapter extends BaseAdapter {
                 aname = artAndCraft_pojos.get(i).getArtname();
                 aimage = artAndCraft_pojos.get(i).getArtimage();
                 aprice = artAndCraft_pojos.get(i).getArtprice();
-                adesc = artAndCraft_pojos.get(i).getArtdesc();
+                //adesc = artAndCraft_pojos.get(i).getArtdesc();
+                i_id = artAndCraft_pojos.get(i).getArtimgid();
+
                 ContentValues cv = new ContentValues();
+                ArrayList<OrderedProducts_pojo> cartItems = orderHelper.getOrderMessage();
+                for(OrderedProducts_pojo cartItem : cartItems){
+                    if(cartItem.getOrderedcat_id().equals(String.valueOf(i_id))){
+                        cv.put("count",cartItem.count+1);
+                        orderHelper.updateCount(i_id.toString(),cv);
+                        return;
+                    }
+                }
                 cv.put("name", aname);
                 cv.put("price", aprice);
                 cv.put("imageone", aimage);
+                cv.put("cat_id", i_id);
+                cv.put("count", 1);
                 orderHelper.insertOrderInfo(cv);
                 Toast.makeText(context, "added to cart", Toast.LENGTH_SHORT).show();
             }

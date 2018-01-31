@@ -89,7 +89,7 @@ public class PaypalActivity extends AppCompatActivity implements View.OnClickLis
         paymentAmount = sm.getString("total_amount", null);
         sm = getSharedPreferences("USER_LOGIN", 0);
         country = sm.getString("country", null);
-        PayPalPayment payment = new PayPalPayment(new BigDecimal(paymentAmount), "USD", "Total cost:", PayPalPayment.PAYMENT_INTENT_SALE);
+        PayPalPayment payment = new PayPalPayment(new BigDecimal(paymentAmount), "AUD", "Total cost:", PayPalPayment.PAYMENT_INTENT_SALE);
         enableShippingAddressRetrieval(payment, true);
         addAppProvidedShippingAddress(payment);
         Intent intent = new Intent(this, PaymentActivity.class);

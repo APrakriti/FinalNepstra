@@ -23,6 +23,7 @@ public class NewArrivalsHelper extends SQLiteOpenHelper{
     String ARRIVAL_TABLE = "CREATE TABLE if not exists `newarrival`  (\n" +
             "                       `id` INTEGER PRIMARY KEY ,\n" +
             "                       `c_id` INTEGER,\n" +
+            "                       `i_id` INTEGER,\n" +
             "                       `name` TEXT,\n" +
             "                       `price` TEXT,\n" +
             "                       `desc` TEXT,\n" +
@@ -49,6 +50,11 @@ public class NewArrivalsHelper extends SQLiteOpenHelper{
 
     }
 
+    public  void  deleteArrival()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from newarrival");
+    }
     public ArrayList<Newarrivals_pojo> getarrivals() {
         Log.e("getOrderMessage", "vaeraxa");
         String sql = "select * from newarrival";
@@ -60,6 +66,7 @@ public class NewArrivalsHelper extends SQLiteOpenHelper{
             Newarrivals_pojo arrivals = new Newarrivals_pojo();
             arrivals.newid = cursor.getInt(cursor.getColumnIndex("id"));
             arrivals.newcid = cursor.getInt(cursor.getColumnIndex("c_id"));
+            arrivals.img_id = cursor.getInt(cursor.getColumnIndex("i_id"));
             arrivals.newname = cursor.getString(cursor.getColumnIndex("name"));
             arrivals.newprice = cursor.getString(cursor.getColumnIndex("price"));
             arrivals.newdesc = cursor.getString(cursor.getColumnIndex("desc"));

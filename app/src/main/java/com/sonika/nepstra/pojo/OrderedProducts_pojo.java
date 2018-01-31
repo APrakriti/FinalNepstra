@@ -7,6 +7,7 @@ package com.sonika.nepstra.pojo;
 public class OrderedProducts_pojo {
     public String orderedname, orderedprice, orderedimage,orderedcat_id;
     public Integer orderid;
+    public Integer count;
 
     public OrderedProducts_pojo() {
     }
@@ -51,11 +52,20 @@ public class OrderedProducts_pojo {
         this.orderid = orderid;
     }
 
-    public OrderedProducts_pojo(String orderedname, String orderedprice, String orderedimage, String orderedcat_id, Integer orderid) {
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public OrderedProducts_pojo(String orderedname, String orderedprice, String orderedimage, String orderedcat_id, Integer orderid, Integer count) {
         this.orderedname = orderedname;
         this.orderedprice = orderedprice;
         this.orderedimage = orderedimage;
         this.orderedcat_id = orderedcat_id;
         this.orderid = orderid;
+        this.count = count;
     }
 }
