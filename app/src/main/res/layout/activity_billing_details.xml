@@ -634,7 +634,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="@+id/lbl_email_address"
-            app:layout_constraintTop_toBottomOf="@+id/radioSex" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
@@ -650,7 +650,7 @@
             android:layout_marginLeft="16dp" />
 
         <RadioGroup
-            android:id="@+id/radioSex"
+            android:id="@+id/radioGroup"
             android:layout_width="384dp"
             android:layout_height="100dp"
             android:layout_marginLeft="16dp"

@@ -86,14 +86,12 @@ public class OrderAdapter extends BaseAdapter  {
         final OrderedProducts_pojo orderInfo = cartlist.get(position);
         dbHelper = new OrderHelper(context);
         final ViewHolder finalHolder = holder;
-        finalHolder.name.setText("Name : " + orderInfo.getOrderedname());
+        finalHolder.name.setText(orderInfo.getOrderedname());
         final String itemTotalPrice = String.valueOf(Integer.valueOf(orderInfo.getCount()) * (Integer.valueOf(orderInfo.getOrderedprice())));
         finalHolder.price.setText(itemTotalPrice);
         Picasso.with(context).load(orderInfo.getOrderedimage()).into(finalHolder.img_product);
         finalHolder.qty.setText(orderInfo.getCount() + " ");
-        spname = finalHolder.name.getText().toString();
-        spprice = finalHolder.price.getText().toString();
-        spquantity= finalHolder.qty.getText().toString();
+
 
 
 
@@ -115,6 +113,10 @@ public class OrderAdapter extends BaseAdapter  {
 
 
             });
+        spname = finalHolder.name.getText().toString();
+        spprice = finalHolder.price.getText().toString();
+        spquantity= finalHolder.qty.getText().toString();
+
         SharedPreferences sp = context.getSharedPreferences("ORDERPREF", MODE_PRIVATE);
         SharedPreferences.Editor spedit = sp.edit();
         spedit.putString("name", spname);

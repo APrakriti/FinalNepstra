@@ -20,6 +20,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -49,7 +50,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Billing extends AppCompatActivity {
-    RadioButton rb_paypal, rb_banktransfer, rb_cash;
+    RadioGroup radioGroup;
+    RadioButton rb_paypal, rb_banktransfer, rb_cash, radioBtn;
     EditText fname,lname, cname, address_1, address_2,
             city, state,postcode,country,email,phone, password;
     SharedPreferences sm;
@@ -121,24 +123,25 @@ public class Billing extends AppCompatActivity {
 
         cbCreateAccount =(CheckBox) findViewById(R.id.cb_create_account);
         cbShipDifferentAddress =(CheckBox) findViewById(R.id.cb_ship_to_different_address);
+        radioGroup = findViewById(R.id.radioGroup);
 
-        rb_paypal = findViewById(R.id.radioButtonPaypal);
-        rb_banktransfer = findViewById(R.id.radioButtonDirectBank);
-        rb_cash = findViewById(R.id.radioButtonCash);
-
-        if (rb_paypal.isChecked())
-        {
-            payment_method = "Paypal";
-
-        }
-        if (rb_cash.isChecked())
-        {
-            payment_method = "cash on deleivery";
-        }
-        if (rb_banktransfer.isChecked())
-        {
-            payment_method = "Direct bank transfer";
-        }
+//        rb_paypal = findViewById(R.id.radioButtonPaypal);
+//        rb_banktransfer = findViewById(R.id.radioButtonDirectBank);
+//        rb_cash = findViewById(R.id.radioButtonCash);
+//
+//        if (rb_paypal.isChecked())
+//        {
+//            payment_method = "Paypal";
+//
+//        }
+//        if (rb_cash.isChecked())
+//        {
+//            payment_method = "cash on deleivery";
+//        }
+//        if (rb_banktransfer.isChecked())
+//        {
+//            payment_method = "Direct bank transfer";
+//        }
 
         lblPassword = (EditText) findViewById(R.id.lbl_password);
         btnplaceorder = (Button) findViewById(R.id.btn_place_order);
@@ -221,6 +224,11 @@ public class Billing extends AppCompatActivity {
         scountry = country.getText().toString();
         sphone = phone.getText().toString();
         semail = email.getText().toString();
+        int selectedId = radioGroup.getCheckedRadioButtonId();
+
+        // find the radiobutton by returned id
+        radioBtn = (RadioButton) findViewById(selectedId);
+        payment_method = radioBtn.getText().toString();
         if(cbShipDifferentAddress.isChecked()){
             sshipfname = shipfname.getText().toString();
             sshiplname = shiplname.getText().toString();
@@ -234,6 +242,14 @@ public class Billing extends AppCompatActivity {
             sshiporder = shiporder.getText().toString();
 
         }
+
+
+
+
+  ///  rb_banktransfer = (RadioButton) findViewById(selectedId);
+//        rb_cash = (RadioButton) findViewById(selectedId);
+//        rb_paypal = (RadioButton) findViewById(selectedId);
+
 
 //
 //        SharedPreferences sm = getSharedPreferences("USER_LOGIN", 0);
@@ -300,13 +316,14 @@ public class Billing extends AppCompatActivity {
 
             RequestQueue queue = Volley.newRequestQueue(Billing.this);
             StringRequest sr = new StringRequest
-                    (Request.Method.POST, "http://nepstra.com/api/android/xyz.php?" +"is_new_customer=1"+
+                    (Request.Method.POST, "http://nepstra.com/api/android/xyz.php?" +
+                            "is_new_customer=1"+
                             "&email="+semail +
                             "&first_name="+sname +
                             "&last_name="+slname +
                             "&username="+sname +
                             "&password="+spassword +
-                            "b[first_name]="+sname +
+                            "&b[first_name]="+sname +
                             "&b[last_name]="+slname +
                             "&b[company]="+sname +
                             "&b[address_1]="+saddress_1 +
@@ -328,18 +345,26 @@ public class Billing extends AppCompatActivity {
                             "&s[country]="+sshipcountry +
                             "&s[email]="+semail +
                             "&s[phone]="+sphone +
-                            "&payment_method="+payment_method +
-                            "&payment_method_title="+ payment_method+
+                            "&payment_method="+ payment_method+
+                            "&payment_method_title="+ payment_method +
                             "&set_paid="+"true"+
                             "&s_lines[method_id]="+ 1 +
-                            "&s_lines[method_title]="+payment_method+
-                            "&s_lines[total]="+paymentAmount+
-                            "&line_items[id]="+1 +
-                            "&line_items[product_id]="+1 +
-                            "&line_items[quantity]="+ quantity +
-                            "&line_items[subtotal]="+ paymentAmount +
-                            "&line_items[total]=" +paymentAmount +
+                            "&s_lines[method_title]="+"name"+
+                            "&s_lines[total]="+null+
+                            "&line_items[name]="+"name"+
+
+                            "&line_items[quantity]="+"quantity"+
+                            "&line_items[total]="+paymentAmount+
+                            "&line_items[product_id]="+"1"+
                             "&line_items[price]="+price,
+                            //"&line_items[101-1]" + "&line_items[80-1]",
+//                            "&payment_method="+payment_method +
+//                            "&payment_method_title="+ payment_method+
+//                            "&set_paid="+"true"+
+//                            "&s_lines[method_id]="+ 1 +
+//                            "&s_lines[method_title]="+payment_method+
+//                            "&s_lines[total]="+paymentAmount+
+
 
 //                    (Request.Method.POST, "http://nepstra.com/api/finalorder.php?is_new_customer=1" +
 //                            "&email="+semail +
