@@ -75,7 +75,6 @@ public class BillingDetails extends AppCompatActivity {
         });
 
 
-
 //        SharedPreferences sm = getSharedPreferences("USER_LOGIN", 0);
 //        SharedPreferences.Editor editor = sm.edit();
 //        editor.putString("name", sname);
@@ -106,25 +105,13 @@ public class BillingDetails extends AppCompatActivity {
 //        editor3.putString("email", semail);
 //        editor.apply();
 //        editor.commit();
-
-//k garne ho api naayepaxi :P
-        //JHEU LAGISAKYO
-    }
-
-
-
-
-
-
-
-
 //        private boolean isValidContact(String ssphone) {
 //            if (ssphone != null && ssphone.length() == 10){
 //                return true;
 //            }
 //            return false;
 //        }
-
+    }
 
     class registerAsyncTask extends AsyncTask<String, String, String> {
         @Override

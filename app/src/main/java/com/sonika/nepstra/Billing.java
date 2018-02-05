@@ -34,6 +34,7 @@ import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -242,16 +243,6 @@ public class Billing extends AppCompatActivity {
             sshiporder = shiporder.getText().toString();
 
         }
-
-
-
-
-  ///  rb_banktransfer = (RadioButton) findViewById(selectedId);
-//        rb_cash = (RadioButton) findViewById(selectedId);
-//        rb_paypal = (RadioButton) findViewById(selectedId);
-
-
-//
 //        SharedPreferences sm = getSharedPreferences("USER_LOGIN", 0);
 //        SharedPreferences.Editor editor = sm.edit();
 //        editor.putString("name", sname);
@@ -315,8 +306,9 @@ public class Billing extends AppCompatActivity {
         // &line_items[quantity]=5&&line_items[subtotal]=420&line_items[total]=420&line_items[price]=420
 
             RequestQueue queue = Volley.newRequestQueue(Billing.this);
-            StringRequest sr = new StringRequest
-                    (Request.Method.POST, "http://nepstra.com/api/android/xyz.php?" +
+            JsonArrayRequest sr = new JsonArrayRequest
+                   (Request.Method.POST,
+                    "http://nepstra.com/api/android/xyz.php?" +
                             "is_new_customer=1"+
                             "&email="+semail +
                             "&first_name="+sname +
@@ -351,71 +343,20 @@ public class Billing extends AppCompatActivity {
                             "&s_lines[method_id]="+ 1 +
                             "&s_lines[method_title]="+"name"+
                             "&s_lines[total]="+null+
-                            "&line_items[name]="+"name"+
 
-                            "&line_items[quantity]="+"quantity"+
-                            "&line_items[total]="+paymentAmount+
-                            "&line_items[product_id]="+"1"+
-                            "&line_items[price]="+price,
-                            //"&line_items[101-1]" + "&line_items[80-1]",
-//                            "&payment_method="+payment_method +
-//                            "&payment_method_title="+ payment_method+
-//                            "&set_paid="+"true"+
-//                            "&s_lines[method_id]="+ 1 +
-//                            "&s_lines[method_title]="+payment_method+
-//                            "&s_lines[total]="+paymentAmount+
+                            "&line_items[0][name]="+"name"+
+                            "&line_items[0][quantity]="+ "1"+
+                            "&line_items[0][price]="+"2"+
+                            "&line_items[1][name]="+"pesdsk"+
+                            "&line_items[1][quantity]="+"2"+
+                            "&line_items[1][price]="+"2"+
+                            "&line_items[0][total]="+"4"+
+                            "&line_items[1][total]="+"4",
 
 
-//                    (Request.Method.POST, "http://nepstra.com/api/finalorder.php?is_new_customer=1" +
-//                            "&email="+semail +
-//                            "&first_name="+sname +
-//                            "&last_name="+slname +
-//                            "&username="+sname +
-//                            "&password="+spassword +
-//                            "&b[first_name]="+sname +
-//                            "&b[last_name]="+slname +
-//                            "&b[company]="+sname +
-//                            "&b[address_1]="+saddress_1 +
-//                            "&b[address_2]="+saddress_2+
-//                            "&b[city]="+scity +
-//                            "&b[state]="+sstate +
-//                            "&b[postcode]="+spostcode +
-//                            "&b[country]="+scountry +
-//                            "&b[email]="+semail +
-//                            "&b[phone]="+sphone +
-//                            "&s[first_name]="+sshipfname +
-//                            "&s[last_name]="+sshiplname +
-//                            "&s[company]="+sshipcompany +
-//                            "&s[address_1]="+sshipaddress_1 +
-//                            "&s[address_2]="+sshipaddress_2 +
-//                            "&s[city]="+sshipcity +
-//                            "&s[state]="+sshipstate +
-//                            "&s[postcode]="+sshippostcode +
-//                            "&s[country]="+sshipcountry +
-//                            "&s[email]="+semail +
-//                            "&s[phone]="+sphone +
-//                            "&payment_method="+ "cod"+
-//                            "&payment_method_title="+"cash_on_delivery" +
-//                            "&set_paid="+"true"+
-//                            "&s_lines[method_id]="+ "1" +
-//                            "&s_lines[method_title]="+"shipping_title"+
-//                            "&s_lines[total]="+"50"+
-//                            "&line_items[101-1]" + "&line_items[80-1]",
-
-//                            "&payment_method="+payment_method +
-//                            "&payment_method_title="+ payment_method+
-//                            "&set_paid="+"true"+
-//                            "&s_lines[method_id]="+ 1 +
-//                            "&s_lines[method_title]="+payment_method+
-//                            "&s_lines[total]="+paymentAmount+
-//                            "&line_items[101-1]" + "&&line_items[80-1]",
-
-
-
-
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
+                           new Response.Listener<JSONArray>() {
+                       @Override
+                        public void onResponse(JSONArray response) {
                                Intent i = new Intent(Billing.this, PaypalActivity.class);
                                 startActivity(i);
                                 mprogressDialog.hide();
