@@ -682,7 +682,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="36dp"
                 android:layout_marginStart="36dp"
-                android:text="Direct Bank Transfer"
+                android:text="Bank"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/radioButton5" />
 
@@ -694,7 +694,7 @@
                 android:layout_marginLeft="36dp"
                 android:layout_marginRight="211dp"
                 android:layout_marginStart="36dp"
-                android:text="Cash On Delivery"
+                android:text="Cash"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/radioButton7" />

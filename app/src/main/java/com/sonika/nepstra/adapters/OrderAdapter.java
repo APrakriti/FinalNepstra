@@ -1,10 +1,8 @@
 package com.sonika.nepstra.adapters;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sonika.nepstra.R;
 import com.sonika.nepstra.helpers.OrderHelper;
@@ -33,6 +30,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class OrderAdapter extends BaseAdapter  {
     SharedPreferences sm;
     String spname, spprice, spquantity;
+    OrderedProducts_pojo orderedProducts_pojo;
 
     Context context;
     List<OrderedProducts_pojo> cartlist = new ArrayList<OrderedProducts_pojo>();
@@ -113,9 +111,23 @@ public class OrderAdapter extends BaseAdapter  {
 
 
             });
+
+
         spname = finalHolder.name.getText().toString();
         spprice = finalHolder.price.getText().toString();
         spquantity= finalHolder.qty.getText().toString();
+//        ArrayList userList   = new ArrayList();
+//        userList.add(new Users());
+//        userList.add(new Users());
+//        SharedPreferences prefs = context.getSharedPreferences("ORDERPREF", Context.MODE_PRIVATE);
+////save the user list to preference
+//        SharedPreferences.Editor editor = prefs.edit();
+//        try {
+//            editor.putString("UserList", ObjectSerializer.serialize(userList));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        editor.commit();
 
         SharedPreferences sp = context.getSharedPreferences("ORDERPREF", MODE_PRIVATE);
         SharedPreferences.Editor spedit = sp.edit();
