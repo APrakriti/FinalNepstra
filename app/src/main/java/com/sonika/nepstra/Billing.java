@@ -53,7 +53,7 @@ import static com.google.android.gms.common.api.Status.sr;
 import static com.paypal.android.sdk.cx.f;
 import static com.paypal.android.sdk.cx.i;
 
-public class Billing extends AppCompatActivity implements View.OnClickListener {
+public class Billing extends AppCompatActivity {
     EditText fname, lname, cname, address_1, address_2,
             city, state, postcode, country, email, phone, password;
     Button btnplaceorder;
@@ -99,6 +99,31 @@ public class Billing extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_billing_details);
+        sm = getSharedPreferences("USER_LOGIN", 0);
+        paymentAmount = sm.getString("total_amount", null);
+
+//        sm = getSharedPreferences("ORDERPREF", 0);
+//        name = sm.getString("name", null);
+//        price = sm.getString("price", null);
+//        quantity = sm.getString("quantity", null);
+
+        orderHelper = new OrderHelper(Billing.this);
+        cartlist = orderHelper.getOrderMessage();
+        for (int position = 0; position < cartlist.size(); position++)
+        {
+//        "&line_items[1][name]="+ name +
+            requestString +="&line_items["+position+"][name]="+cartlist.get(position).getOrderedname()+
+                    "&line_items["+position+"][quantity]=" + cartlist.get(position).getCount() +
+                    "&line_items["+position +"][price]=" + cartlist.get(position).getOrderedprice() +
+                    "&line_items[" +position+"][total]="+ String.valueOf(Integer.valueOf(cartlist.get(position).getCount()) * (Integer.valueOf(cartlist.get(position).getOrderedprice())));
+
+
+        }
+
+        //   name.setText(orderInfo.getOrderedname());
+
+
+
 
         //Hooking the UI views for usage
         fname = (EditText) findViewById(R.id.lbl_first_name);
@@ -125,128 +150,128 @@ public class Billing extends AppCompatActivity implements View.OnClickListener {
         shipcountry = (EditText) findViewById(R.id.lbl_country_ship);
         shiporder = (EditText) findViewById(R.id.lbl_order_notes_ship);
 
+        cbCreateAccount =(CheckBox) findViewById(R.id.cb_create_account);
+        cbShipDifferentAddress =(CheckBox) findViewById(R.id.cb_ship_to_different_address);
 
-        cbCreateAccount = (CheckBox) findViewById(R.id.cb_create_account);
 
-        cbShipDifferentAddress = (CheckBox) findViewById(R.id.cb_ship_to_different_address);
+        rg_paymentmethod = findViewById(R.id.radioGroup);
+        rb_paypal = findViewById(R.id.radioButtonPaypal);
+        rb_bank = findViewById(R.id.radioButtonDirectBank);
+        rb_cash = findViewById(R.id.radioButtonCash);
+//
+//        if (rb_paypal.isChecked())
+//        {
+//            payment_method = "Paypal";
+//
+//        }
+//        if (rb_cash.isChecked())
+//        {
+//            payment_method = "cash on deleivery";
+//        }
+//        if (rb_banktransfer.isChecked())
+//        {
+//            payment_method = "Direct bank transfer";
+//        }
 
         lblPassword = (EditText) findViewById(R.id.lbl_password);
         btnplaceorder = (Button) findViewById(R.id.btn_place_order);
         scrollView = (ScrollView) findViewById(R.id.scroll_view);
-        shipConstraintLayout = (ConstraintLayout) findViewById(R.id.constraint_layout_ship);
+        shipConstraintLayout = (ConstraintLayout)findViewById(R.id.constraint_layout_ship);
 
         shipConstraintLayout.setVisibility(View.GONE);
         lblPassword.setVisibility(View.GONE);
-
-        rg_paymentmethod = (RadioGroup) findViewById(R.id.radioGroup);
-        rb_paypal = (RadioButton) findViewById(R.id.radioButtonPaypal);
-        rb_bank = (RadioButton) findViewById(R.id.radioButtonDirectBank);
-        rb_cash = (RadioButton) findViewById(R.id.radioButtonCash);
-
-        sm = getSharedPreferences("USER_LOGIN", 0);
-        paymentAmount = sm.getString("total_amount", null);
-
-
-        orderHelper = new OrderHelper(Billing.this);
-        cartlist = orderHelper.getOrderMessage();
-        for (int position = 0; position < cartlist.size(); position++)
-        {
-
-            requestString += "&line_items["+position+"][name]="+cartlist.get(position).getOrderedname()+
-                    "&line_items["+position+"][quantity]=" + cartlist.get(position).getCount() +
-                    "&line_items["+position +"][price]=" + cartlist.get(position).getOrderedprice() +
-                    "&line_items[" +position+"][total]=" +cartlist.get(position).getOrderedprice();
-
-
-        }
-        Log.e("requestString", requestString.toString());
-
-
-
-
         cbCreateAccount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked) {
-                    if (cbCreateAccount.isChecked()) {
+                if(isChecked) {
+                    if(cbCreateAccount.isChecked())
+                    {
                         //cbShipDifferentAddress.setChecked(true);
                         lblPassword.setVisibility(View.VISIBLE);
                         //spassword = password.getText().toString();
-                    } else {
-                        lblPassword.setVisibility(View.GONE);
-
-                        scrollView.fullScroll(View.FOCUS_DOWN);
                     }
-                } else {
+                    else
+                    {
+                        lblPassword.setVisibility(View.GONE);
+                        scrollView.fullScroll(View.FOCUS_DOWN);
+                    }}
+                else
+                {
                     lblPassword.setVisibility(View.GONE);
                     //scrollView.fullScroll(View.FOCUS_DOWN);
-
                 }
-            }
-        });
+            }});
 
         cbShipDifferentAddress.setOnCheckedChangeListener
-                (new CompoundButton.OnCheckedChangeListener() {
+                (new CompoundButton.OnCheckedChangeListener(){
                     @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, final boolean isChecked) {
-                        if (isChecked) {
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                        if(isChecked)
+                        {
 //                            if(cbCreateAccount.isChecked()) {
 //                                cbCreateAccount.setChecked(false);
 //                                lblPassword.setVisibility(View.GONE);
-//                            }
+                            //     }
                             shipConstraintLayout.setVisibility(View.VISIBLE);
                             scrollView.fullScroll(View.FOCUS_DOWN);
 
                             sshipfname = shipfname.getText().toString();
                             sshiplname = shiplname.getText().toString();
                             sshipcompany = shipcompany.getText().toString();
-                            sshipaddress_1 = shipaddress_1.getText().toString();
+                            sshipaddress_1 =shipaddress_1.getText().toString();
                             sshipaddress_2 = shipaddress_2.getText().toString();
                             sshipcity = shipcity.getText().toString();
                             sshipstate = shipstate.getText().toString();
                             sshippostcode = shippostcode.getText().toString();
                             sshipcountry = shipcountry.getText().toString();
                             sshiporder = shiporder.getText().toString();
-                        } else {
+                        }
+                        else
+                        {
                             shipConstraintLayout.setVisibility(View.GONE);
 
                         }
 
 
+
+
                         btnplaceorder.setOnClickListener(new View.OnClickListener() {
-                                                             @Override
-                                                             public void onClick(View view) {
+                            @Override
+                            public void onClick(View view) {
 
-                                                                 sname = fname.getText().toString();
-                                                                 slname = lname.getText().toString();
+                                sname = fname.getText().toString();
+                                slname = lname.getText().toString();
+                                if(cbCreateAccount.isChecked()){
+                                    spassword = password.getText().toString();
+                                }
 
-                                                                 if (cbCreateAccount.isChecked()) {
-                                                                     spassword = password.getText().toString();
-                                                                 }
+                                scname = cname.getText().toString();
+                                saddress_1 = address_1.getText().toString();
+                                saddress_2 = address_2.getText().toString();
+                                scity = city.getText().toString();
+                                sstate = state.getText().toString();
+                                spostcode = postcode.getText().toString();
+                                scountry = country.getText().toString();
+                                sphone = phone.getText().toString();
+                                semail = email.getText().toString();
+                                int selectedId = rg_paymentmethod.getCheckedRadioButtonId();
 
-                                                                 scname = cname.getText().toString();
-                                                                 saddress_1 = address_1.getText().toString();
-                                                                 saddress_2 = address_2.getText().toString();
-                                                                 scity = city.getText().toString();
-                                                                 sstate = state.getText().toString();
-                                                                 spostcode = postcode.getText().toString();
-                                                                 scountry = country.getText().toString();
-                                                                 sphone = phone.getText().toString();
-                                                                 semail = email.getText().toString();
+                                // find the radiobutton by returned id
+                                radioButton = (RadioButton) findViewById(selectedId);
+                                paymentMethod = radioButton.getText().toString();
+                                if(cbShipDifferentAddress.isChecked()){
+                                    sshipfname = shipfname.getText().toString();
+                                    sshiplname = shiplname.getText().toString();
+                                    sshipcompany = shipcompany.getText().toString();
+                                    sshipaddress_1 =shipaddress_1.getText().toString();
+                                    sshipaddress_2 = shipaddress_2.getText().toString();
+                                    sshipcity = shipcity.getText().toString();
+                                    sshipstate = shipstate.getText().toString();
+                                    sshippostcode = shippostcode.getText().toString();
+                                    sshipcountry = shipcountry.getText().toString();
+                                    sshiporder = shiporder.getText().toString();
 
-                                                                 if (cbShipDifferentAddress.isChecked()) {
-                                                                     sshipfname = shipfname.getText().toString();
-                                                                     sshiplname = shiplname.getText().toString();
-                                                                     sshipcompany = shipcompany.getText().toString();
-                                                                     sshipaddress_1 = shipaddress_1.getText().toString();
-                                                                     sshipaddress_2 = shipaddress_2.getText().toString();
-                                                                     sshipcity = shipcity.getText().toString();
-                                                                     sshipstate = shipstate.getText().toString();
-                                                                     sshippostcode = shippostcode.getText().toString();
-                                                                     sshipcountry = shipcountry.getText().toString();
-                                                                     sshiporder = shiporder.getText().toString();
-                                                                 }
-//
+                                }
 //        SharedPreferences sm = getSharedPreferences("USER_LOGIN", 0);
 //        SharedPreferences.Editor editor = sm.edit();
 //        editor.putString("name", sname);
@@ -278,276 +303,104 @@ public class Billing extends AppCompatActivity implements View.OnClickListener {
 //        editor.apply();
 //        editor.commit();
 
-                                                                 mprogressDialog = new ProgressDialog(Billing.this);
-                                                                 mprogressDialog.setMessage("Loading...");
-                                                                 mprogressDialog.show();
+                                Log.e("Tag", "signupPrakriti");
+                                mprogressDialog= new ProgressDialog(Billing.this);
+                                mprogressDialog.setMessage("Loading...");
+                                mprogressDialog.show();
+
+                                RequestQueue queue = Volley.newRequestQueue(Billing.this);
+                                StringRequest sr = new StringRequest
+                                        (Request.Method.POST, "http://nepstra.com/api/android/xyz.php?" +
+                                                "is_new_customer=" + 1 +
+                                                "&email=" + semail +
+                                                "&first_name=" + sname +
+                                                "&last_name=" + slname +
+                                                "&username=" + sname +
+                                                "&password=" + spassword +
+                                                "&b[first_name]=" + sname +
+                                                "&b[last_name]=" + slname +
+                                                "&b[company]=" + sname +
+                                                "&b[address_1]=" + saddress_1 +
+                                                "&b[address_2]=" + saddress_2 +
+                                                "&b[city]=" + scity +
+                                                "&b[state]=" + sstate +
+                                                "&b[postcode]=" + spostcode +
+                                                "&b[country]=" + scountry +
+                                                "&b[email]=" + semail +
+                                                "&b[phone]=" + sphone +
+                                                "&s[first_name]=" + sshipfname +
+                                                "&s[last_name]=" + sshiplname +
+                                                "&s[company]=" + sshipcompany +
+                                                "&s[address_1]=" + sshipaddress_1 +
+                                                "&s[address_2]=" + sshipaddress_2 +
+                                                "&s[city]=" + sshipcity +
+                                                "&s[state]=" + sshipstate +
+                                                "&s[postcode]=" + sshippostcode +
+                                                "&s[country]=" + sshipcountry +
+                                                "&s[email]=" + semail +
+                                                "&s[phone]=" + sphone +
+                                                "&payment_method=" + "productName" +
+                                                "&payment_method_title=" + paymentMethod +
+                                                "&set_paid=" + "true" +
+                                                "&s_lines[method_id]=" + 1 +
+                                                "&s_lines[method_title]=" + paymentMethod +
+                                                "&s_lines[total]=" + "payment for shipping" + requestString,
 
 
-
-//                                                "&line_items[0][name]="+ "sonika" +
-//                                                "&line_items[0][quantity]=" +1+
-//                                                "&line_items[0][price]=" +400 +
-//
-//
-//                                                "&line_items[1][name]="+"prakriti" +
-//                                                "&line_items[1][quantity]=" + 2 +
-//                                                "&line_items[1][price]=" +400+
-//
-//                                                "&line_items[0][total]=" +800+
-//                                                "&line_items[1][total]=" +400,
-                                                                                 //requestString,
+                                                new Response.Listener<String>() {
+                                                    @Override
+                                                    public void onResponse(String response) {
+                                                        Intent i = new Intent(Billing.this, PaypalActivity.class);
+                                                        startActivity(i);
+                                                        mprogressDialog.hide();
+                                                        Log.e("HttpClient", "success! response: " + response.toString());
+                                                    }
 
 
+                                                },
 
-
-                                                                                 getPayment();
-
-                                                                 final int selected_paymentmethod_id = rg_paymentmethod.getCheckedRadioButtonId();
-                                                                 radioButton = (RadioButton) findViewById(selected_paymentmethod_id);
-                                                                 paymentMethod = radioButton.getText().toString();
-                                                                 //  if( radioButton == rb_paypal)
-                                                                 btnplaceorder.setOnClickListener(this);
-                                                                 Intent intent = new Intent(Billing.this, PayPalService.class);
-
-                                                                 intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
-
-                                                                 startService(intent);
-                                                             } //Paypal Configuration Object
-
-
-
-
-                                                             private void getPayment() {
-
-//                                                                 sm = getSharedPreferences("USER_LOGIN", 0);
-//                                                                 paymentAmount = sm.getString("total_amount", null);
-//                                                                 sm = getSharedPreferences("USER_LOGIN", 0);
-//                                                                 country = sm.getString("country", null);
-                                                                 PayPalPayment payment = new PayPalPayment(new BigDecimal(paymentAmount), "AUD", "Total cost:", PayPalPayment.PAYMENT_INTENT_SALE);
-                                                                 enableShippingAddressRetrieval(payment, true);
-                                                                 addAppProvidedShippingAddress(payment);
-                                                                 Intent intent = new Intent(Billing.this, PaymentActivity.class);
-
-                                                                 //putting the paypal configuration to the intent
-                                                                 intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
-
-                                                                 //Puting paypal payment to the intent
-                                                                 intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
-
-                                                                 //Starting the intent activity for result
-                                                                 //the request code will be used on the method onActivityResult
-                                                                 startActivityForResult(intent, PAYPAL_REQUEST_CODE);
-                                                             }
-
-                                                             private void addAppProvidedShippingAddress(PayPalPayment paypalPayment) {
-
-//                                                                 sm = getSharedPreferences("USER_LOGIN", 0);
-//                                                                 name = sm.getString("total_amount", null);
-//                                                                 sm = getSharedPreferences("USER_LOGIN", 0);
-//                                                                 city = sm.getString("total_amount", null);
-//                                                                 sm = getSharedPreferences("USER_LOGIN", 0);
-//                                                                 state = sm.getString("total_amount", null);
-//                                                                 sm = getSharedPreferences("USER_LOGIN", 0);
-//                                                                 phoneno = sm.getString("phone", null);
-//                                                                 sm = getSharedPreferences("USER_LOGIN", 0);
-//                                                                 mail = sm.getString("email", null);
-//                                                                 sm = getSharedPreferences("USER_LOGIN", 0);
-//                                                                 country = sm.getString("country", null);
-
-                                                                 ShippingAddress shippingAddress = new ShippingAddress().recipientName("name").line1("52 North Main St.")
-                                                                         .city("sdjfh").state("jhsadf").postalCode("78729").countryCode("US");
-                                                                 paypalPayment.providedShippingAddress(shippingAddress);
-//        ShippingAddress shippingAddress =  new ShippingAddress().recipientName(name).line1("52 North Main St.")
-//                .city("Austin").state("TX").postalCode("78729").countryCode("US");
-//        paypalPayment.providedShippingAddress(shippingAddress);
-
-
-                                                             }
-
-                                                             /*
-                                                              * Enable retrieval of shipping addresses from buyer's PayPal account
-                                                              */
-                                                             private void enableShippingAddressRetrieval(PayPalPayment paypalPayment, boolean enable) {
-                                                                 paypalPayment.enablePayPalShippingAddressesRetrieval(enable);
-                                                             }
-
-
-
-                                                             protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-                                                                 //If the result is from paypal
-                                                                 if (requestCode == PAYPAL_REQUEST_CODE) {
-
-                                                                     //If the result is OK i.e. user has not canceled the payment
-                                                                     if (resultCode == Activity.RESULT_OK) {
-                                                                         //Getting the payment confirmation
-                                                                         PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
-
-                                                                         //if confirmation is not null
-                                                                         if (confirm != null) {
-                                                                             try {
-                                                                                 //Getting the payment details
-                                                                                 String paymentDetails = confirm.toJSONObject().toString(4);
-                                                                                 Log.i("paymentExample", paymentDetails);
-
-                                                                                 //Starting a new activity for the payment details and also putting the payment details with intent
-                                                                                 startActivity(new Intent(Billing.this, ConfirmationActivity.class)
-                                                                                         .putExtra("PaymentDetails", paymentDetails)
-                                                                                         .putExtra("PaymentAmount", paymentAmount));
-
-                                                                             } catch (JSONException e) {
-                                                                                 Log.e("paymentExample", "an extremely unlikely failure occurred: ", e);
-                                                                             }
-                                                                         }
-                                                                     } else if (resultCode == Activity.RESULT_CANCELED) {
-                                                                         Log.i("paymentExample", "The user canceled.");
-                                                                     } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
-                                                                         Log.i("paymentExample", "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
-                                                                     }
-                                                                 }
-                                                             }
-
-
-                                                         });
-
-                        RequestQueue queue = Volley.newRequestQueue(Billing.this);
-                        StringRequest sr = new StringRequest
-                                (Request.Method.POST, "http://nepstra.com/api/android/xyz.php?" +
-                                        "is_new_customer="+1 +
-                                        "&email="+semail +
-                                        "&first_name="+sname +
-                                        "&last_name="+slname +
-                                        "&username="+sname +
-                                        "&password="+spassword +
-                                        "&b[first_name]="+sname +
-                                        "&b[last_name]="+slname +
-                                        "&b[company]="+sname +
-                                        "&b[address_1]="+saddress_1 +
-                                        "&b[address_2]="+saddress_2+
-                                        "&b[city]="+scity +
-                                        "&b[state]="+sstate +
-                                        "&b[postcode]="+spostcode +
-                                        "&b[country]="+scountry +
-                                        "&b[email]="+semail +
-                                        "&b[phone]="+sphone +
-                                        "&s[first_name]="+sshipfname +
-                                        "&s[last_name]="+sshiplname +
-                                        "&s[company]="+sshipcompany +
-                                        "&s[address_1]="+sshipaddress_1 +
-                                        "&s[address_2]="+sshipaddress_2 +
-                                        "&s[city]="+sshipcity +
-                                        "&s[state]="+sshipstate +
-                                        "&s[postcode]="+sshippostcode +
-                                        "&s[country]="+sshipcountry +
-                                        "&s[email]="+semail +
-                                        "&s[phone]="+sphone +
-                                        "&payment_method="+ "productName" +
-                                        "&payment_method_title="+ paymentMethod+
-                                        "&set_paid="+"true"+
-                                        "&s_lines[method_id]=" + 1 +
-                                        "&s_lines[method_title]=" +  paymentMethod +
-                                        "&s_lines[total]=" +"payment for shipping"+
-                                        requestString,
-
-
-
-
-
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Intent i = new Intent(Billing.this, PaypalActivity.class);
-                                startActivity(i);
-                                mprogressDialog.hide();
-                                Log.e("HttpClient", "success! response: " + response.toString());
-                            }
-
-
-                        },
-
-                                new Response.ErrorListener() {
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+                                                        Log.e("HttpClient", "error: " + error.toString());
+                                                        mprogressDialog.hide();
+                                                    }
+                                                }) {
                                     @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Log.e("HttpClient", "error: " + error.toString());
-                                        mprogressDialog.hide();
+                                    protected Map<String, String> getParams() {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        return params;
                                     }
-                                }) {
-                            @Override
-                            protected Map<String, String> getParams() {
-                                Map<String, String> params = new HashMap<String, String>();
-//                    params.put("email", semail);
-//                    params.put("first_name", sname);
-//                    params.put("last_name", slname);
-//                    params.put("username", sname);
-//                    params.put("password", "password");
-//                    params.put("b[first_name]", sname);
-//                    params.put("b[last_name]", slname);
-//                    params.put("b[company]", scname);
-//                    params.put("b[address_1]", saddress_1);
-//                    params.put("b[address_2]", saddress_2);
-//                    params.put("b[city]", scity);
-//                    params.put("b[state]", sstate);
-//                    params.put("b[postcode]", spostcode);
-//                    params.put("b[country]", scountry);
-//                    params.put("b[email]", semail);
-//                    params.put("b[phone]", sphone);
-//                    params.put("s[first_name]", sname);
-//                    params.put("s[last_name]", slname);
-//                    params.put("s[company]", scname);
-//                    params.put("s[address_1]", saddress_1);
-//                    params.put("s[address_2]", saddress_2);
-//                    params.put("s[city]", scity);
-//                    params.put("s[state]", sstate);
-//                    params.put("s[postcode]", spostcode);
-//                    params.put("s[country]", scountry);
-//                    params.put("s[email]", semail);
-//                    params.put("s[phone]", sphone);
-//                    params.put("payment_method", "cod");
-//                    params.put("payment_method_title", "cash_on_delivery");
-//                    params.put("s_lines[method_id]", "1");
-//                    params.put("s_lines[method_title]","shipping_title" );
-//                    params.put("s_lines[total]", "50");
-//                    params.put("line_items[101-1]", "static");
-//                    params.put("line_items[80-1]","static");
-                                return params;
-                            }
 
-                            @Override
-                            public Map<String, String> getHeaders() throws AuthFailureError {
-                                Map<String, String> params = new HashMap<String, String>();
-                                params.put("Content-Type", "application/x-www-form-urlencoded");
-                                return params;
-                            }
-                        };
-                        sr.setRetryPolicy(new RetryPolicy() {
-                            @Override
-                            public int getCurrentTimeout() {
-                                return 50000;
-                            }
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("Content-Type", "application/x-www-form-urlencoded");
+                                        return params;
+                                    }
+                                };
+                                sr.setRetryPolicy(new RetryPolicy() {
+                                    @Override
+                                    public int getCurrentTimeout() {
+                                        return 50000;
+                                    }
 
-                            @Override
-                            public int getCurrentRetryCount() {
-                                return 50000;
-                            }
+                                    @Override
+                                    public int getCurrentRetryCount() {
+                                        return 50000;
+                                    }
 
-                            @Override
-                            public void retry(VolleyError error) throws VolleyError {
+                                    @Override
+                                    public void retry(VolleyError error) throws VolleyError {
+
+                                    }
+                                });
+                                queue.add(sr);
+
 
                             }
                         });
-                        queue.add(sr);
+                    }
 
 
-                    }});}
-
-
-
-
-
-
-
-@Override
-    public void onClick(View view) {
-      ;
-
-    }
-}
+                });}}
