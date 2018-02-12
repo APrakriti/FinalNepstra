@@ -139,7 +139,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//import com.sonika.nepstra.adapters.MyOrderAdapter;
 import com.sonika.nepstra.adapters.MyOrderAdapter;
+import com.sonika.nepstra.adapters.Mydetailsorder;
 import com.sonika.nepstra.parser.JsonParserA;
 import com.sonika.nepstra.pojo.Myorder;
 
@@ -157,6 +159,7 @@ public class MyOrders extends AppCompatActivity {
     RecyclerView mRecyclerView;
     List<Myorder>allmyorderlist = new ArrayList<Myorder>();
     MyOrderAdapter myOrderAdpater = null;
+   // MyOrderAdapter myOrderAdpater = null;
 
     int flag;
 
@@ -197,7 +200,7 @@ public class MyOrders extends AppCompatActivity {
             JsonParserA jsonParser = new JsonParserA();
             Log.e("uemail", ssemail);
             JSONObject jsonObject = jsonParser.performPostCI
-                    ("https://nepstra.com/api/android/customerorder.php?email=" +ssemail, loginHashMap);
+                    ("https://nepstra.com/api/android/customerorder.php?email="+ssemail, loginHashMap);
             try {
                 if (jsonObject == null) {
                     flag = 1;
@@ -298,6 +301,7 @@ public class MyOrders extends AppCompatActivity {
                         Integer shipping_meta_data_id = null;
                         Integer meta_data_value_number = null;
                         Integer meta_data_value_order_id = null;
+                        Log.e("pppp", "qqqq");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject dataObject = jsonArray.getJSONObject(i);
                             id = dataObject.getInt("id");
@@ -308,6 +312,7 @@ public class MyOrders extends AppCompatActivity {
                             version = dataObject.getString("version");
                             status = dataObject.getString("status");
                             currence = dataObject.getString("currency");
+                            Log.e("pppp", "qqqq11");
 
                             date_created = dataObject.getString("date_created");
                             date_created_gmt = dataObject.getString("date_created_gmt");

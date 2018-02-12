@@ -73,7 +73,7 @@ public class PaypalActivity extends AppCompatActivity implements View.OnClickLis
     private static PayPalConfiguration config = new PayPalConfiguration()
             // Start with mock environment.  When ready, switch to sandbox (ENVIRONMENT_SANDBOX)
             // or live (ENVIRONMENT_PRODUCTION)
-            .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
+            .environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION)
             .clientId(PayPalConfig.PAYPAL_CLIENT_ID);
 
 

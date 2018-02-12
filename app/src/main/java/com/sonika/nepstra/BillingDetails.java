@@ -1,97 +1,101 @@
 package com.sonika.nepstra;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonArray;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
+import com.paypal.android.sdk.payments.ShippingAddress;
+import com.sonika.nepstra.Configuration.PayPalConfig;
+import com.sonika.nepstra.Paypal.ConfirmationActivity;
 import com.sonika.nepstra.Paypal.PaypalActivity;
 import com.sonika.nepstra.helpers.OrderHelper;
 import com.sonika.nepstra.pojo.OrderedProducts_pojo;
 
 import org.json.JSONArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import java.net.URL;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.android.gms.common.api.Status.sr;
+import static com.paypal.android.sdk.cx.f;
+import static com.paypal.android.sdk.cx.i;
+
 public class BillingDetails extends AppCompatActivity {
-    RadioGroup radioGroup;
-    RadioButton rb_paypal, rb_banktransfer, rb_cash, radioBtn;
-    EditText fname,lname, cname, address_1, address_2,
-            city, state,postcode,country,email,phone, password;
-    SharedPreferences sm;
-    String paymentAmount;
-    String name;
-    String price;
-    Integer quantity;
+    EditText fname, lname, cname, address_1, address_2,
+            city, state, postcode, country, email, phone, password;
     Button btnplaceorder;
+    RadioButton radioButton, rb_cash, rb_bank, rb_paypal;
+    RadioGroup rg_paymentmethod;
     ProgressDialog mprogressDialog;
-    String payment_method, requestString;
-    String sname ;
-    String slname ;
-    String scname ;
+    String sname;
+    String slname;
+    String scname;
     String saddress_1;
     String saddress_2;
     String scity;
     String sstate;
     String spostcode;
-    String scountry ;
+    String scountry;
     String semail;
     String sphone;
     String spassword;
-    EditText shipfname, shiplname, shipcompany, shipcountry, shipaddress_1, shipaddress_2, shipcity, shipstate,shippostcode, shiporder;
-    String sshipfname, sshiplname, sshipcompany, sshipcountry, sshipaddress_1, sshipaddress_2, sshipcity, sshipstate,sshippostcode, sshiporder;
-    int flag;
+    String paymentAmount;
+    String paymentMethod;
+    String name;
+    String price;
+    Integer quantity;
+    SharedPreferences sm;
 
-    TextView _name, _email, _response;
-    android.support.v7.widget.AppCompatButton _sendRequest;
-    ProgressBar _proProgressBar;
+    EditText shipfname, shiplname, shipcompany, shipcountry, shipaddress_1, shipaddress_2, shipcity, shipstate, shippostcode, shiporder;
+    String sshipfname, sshiplname, sshipcompany, sshipcountry, sshipaddress_1, sshipaddress_2, sshipcity, sshipstate, sshippostcode, sshiporder;
+
+    List<OrderedProducts_pojo> cartlist;
     CheckBox cbCreateAccount, cbShipDifferentAddress;
     EditText lblPassword;
-    OrderHelper orderHelper;
     ScrollView scrollView;
     ConstraintLayout shipConstraintLayout;
-    List<OrderedProducts_pojo> cartlist = new ArrayList<OrderedProducts_pojo>();
+    OrderHelper orderHelper;
+    String requestString;
+    public static final int PAYPAL_REQUEST_CODE = 123;
+    public static PayPalConfiguration config = new PayPalConfiguration()
+            // Start with mock environment.  When ready, switch to sandbox (ENVIRONMENT_SANDBOX)
+            // or live (ENVIRONMENT_PRODUCTION)
+            .environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION)
+            //ENVIRONMENT_SANDBOX)
+            .clientId(PayPalConfig.PAYPAL_CLIENT_ID);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +116,7 @@ public class BillingDetails extends AppCompatActivity {
             requestString +="&line_items["+position+"][name]="+cartlist.get(position).getOrderedname()+
                     "&line_items["+position+"][quantity]=" + cartlist.get(position).getCount() +
                     "&line_items["+position +"][price]=" + cartlist.get(position).getOrderedprice() +
-                    "&line_items[" +position+"][total]=" +cartlist.get(position).getOrderedprice();
+                    "&line_items[" +position+"][total]="+ String.valueOf(Integer.valueOf(cartlist.get(position).getCount()) * (Integer.valueOf(cartlist.get(position).getOrderedprice())));
 
 
         }
@@ -151,24 +155,10 @@ public class BillingDetails extends AppCompatActivity {
         cbShipDifferentAddress =(CheckBox) findViewById(R.id.cb_ship_to_different_address);
 
 
-        radioGroup = findViewById(R.id.radioGroup);
+        rg_paymentmethod = findViewById(R.id.radioGroup);
         rb_paypal = findViewById(R.id.radioButtonPaypal);
-        rb_banktransfer = findViewById(R.id.radioButtonDirectBank);
+        rb_bank = findViewById(R.id.radioButtonDirectBank);
         rb_cash = findViewById(R.id.radioButtonCash);
-//
-//        if (rb_paypal.isChecked())
-//        {
-//            payment_method = "Paypal";
-//
-//        }
-//        if (rb_cash.isChecked())
-//        {
-//            payment_method = "cash on deleivery";
-//        }
-//        if (rb_banktransfer.isChecked())
-//        {
-//            payment_method = "Direct bank transfer";
-//        }
 
         lblPassword = (EditText) findViewById(R.id.lbl_password);
         btnplaceorder = (Button) findViewById(R.id.btn_place_order);
@@ -251,11 +241,11 @@ public class BillingDetails extends AppCompatActivity {
                                 scountry = country.getText().toString();
                                 sphone = phone.getText().toString();
                                 semail = email.getText().toString();
-                                int selectedId = radioGroup.getCheckedRadioButtonId();
+                                int selectedId = rg_paymentmethod.getCheckedRadioButtonId();
 
                                 // find the radiobutton by returned id
-                                radioBtn = (RadioButton) findViewById(selectedId);
-                                payment_method = radioBtn.getText().toString();
+                                radioButton = (RadioButton) findViewById(selectedId);
+                                paymentMethod = radioButton.getText().toString();
                                 if(cbShipDifferentAddress.isChecked()){
                                     sshipfname = shipfname.getText().toString();
                                     sshiplname = shiplname.getText().toString();
@@ -304,73 +294,45 @@ public class BillingDetails extends AppCompatActivity {
                                 mprogressDialog= new ProgressDialog(BillingDetails.this);
                                 mprogressDialog.setMessage("Loading...");
                                 mprogressDialog.show();
-                                //http://nepstra.com/api/android/finalorder.php?is_new_customer=1
-                                // &email=ramhari@ramhari.com&first_name=fn&last_name=ln
-                                // &username=ramhari@ramhari.com&password=prakash&b[first_name]=bfn
-                                // &b[last_name]=bln&b[company]=bc&b[address_1]=ba1&b[address_2]=ba2&b[city]=bc
-                                // &b[state]=bs&b[postcode]=bpc&b[country]=bc&b[email]=ramhari@ramhari.com&b[phone]=bp
-
-                                // &s[first_name]=sfn&s[last_name]=sln&s[company]=sc&s[address_1]=sa1&s[address_2]=sa2
-                                // &s[city]=sc&s[state]=ss&s[postcode]=spc&s[country]=sc&s[email]=ramhari@ramhari.com
-                                // &s[phone]=sp&payment_method=cod&payment_method_title=cash_on_delivery&set_paid=true
-                                // &s_lines[method_id]=1&s_lines[method_title]=shipping_title&s_lines[total]=50&line_items[101-1]
-                                // &line_items[80-1]http://nepstra.com/api/android/finalorder.php?is_new_customer=1&email=ramhari@ramhari.com
-                                // &first_name=fn&last_name=ln&username=ramhari@ramhari.com&password=prakash&b[first_name]=bfn&b[last_name]=bln
-                                // &b[company]=bc&b[address_1]=ba1&b[address_2]=ba2&b[city]=bc&b[state]=bs&b[postcode]=bpc&b[country]=bc
-                                // &b[email]=ramhari@ramhari.com&b[phone]=bp&s[first_name]=sfn&s[last_name]=sln&s[company]=sc&s[address_1]=sa1
-                                // &s[address_2]=sa2&s[city]=sc&s[state]=ss&s[postcode]=spc&s[country]=sc&s[email]=ramhari@ramhari.com&s[phone]=sp
-
-                                // &payment_method=cod&payment_method_title=cash_on_delivery&set_paid=true&s_lines[method_id]=1
-                                // &s_lines[method_title]=shipping_title&s_lines[total]=50&line_items[101-1]&line_items[80-1]
-                                //http://nepstra.com/api/android/xyz.php?b[first_name]=bfn&b[last_name]=bln&b[company]=bc&b[address_1]=ba1
-                                // &b[address_2]=ba2&b[city]=bc&b[state]=bs&b[postcode]=bpc&b[country]=bc&b[email]=ramhari@ramhari.com
-                                // &b[phone]=bp&s[first_name]=sfn&s[last_name]=sln&s[company]=sc&s[address_1]=sa1&s[address_2]=sa2
-                                // &s[city]=sc&s[state]=ss&s[postcode]=spc&s[country]=sc&s[email]=ramhari@ramhari.com&s[phone]=sp
-                                // &payment_method=cod&payment_method_title=cash_on_delivery&set_paid=true&s_lines[method_id]=1
-                                // &s_lines[method_title]=shipping_title&s_lines[total]=50
-                                // &line_items[id]=1&line_items[product_id]=1
-                                // &line_items[quantity]=5&&line_items[subtotal]=420&line_items[total]=420&line_items[price]=420
 
                                 RequestQueue queue = Volley.newRequestQueue(BillingDetails.this);
                                 StringRequest sr = new StringRequest
-                                        (Request.Method.POST,
-                                                "http://nepstra.com/api/android/xyz.php?" +
-                                                        "is_new_customer=1"+
-                                                        "&email="+semail +
-                                                        "&first_name="+sname +
-                                                        "&last_name="+slname +
-                                                        "&username="+sname +
-                                                        "&password="+spassword +
-                                                        "&b[first_name]="+sname +
-                                                        "&b[last_name]="+slname +
-                                                        "&b[company]="+sname +
-                                                        "&b[address_1]="+saddress_1 +
-                                                        "&b[address_2]="+saddress_2+
-                                                        "&b[city]="+scity +
-                                                        "&b[state]="+sstate +
-                                                        "&b[postcode]="+spostcode +
-                                                        "&b[country]="+scountry +
-                                                        "&b[email]="+semail +
-                                                        "&b[phone]="+sphone +
-                                                        "&s[first_name]="+sshipfname +
-                                                        "&s[last_name]="+sshiplname +
-                                                        "&s[company]="+sshipcompany +
-                                                        "&s[address_1]="+sshipaddress_1 +
-                                                        "&s[address_2]="+sshipaddress_2 +
-                                                        "&s[city]="+sshipcity +
-                                                        "&s[state]="+sshipstate +
-                                                        "&s[postcode]="+sshippostcode +
-                                                        "&s[country]="+sshipcountry +
-                                                        "&s[email]="+semail +
-                                                        "&s[phone]="+sphone +
-                                                        "&payment_method="+ payment_method+
-                                                        "&payment_method_title="+ payment_method +
-                                                        "&set_paid="+"true"+
-                                                        "&s_lines[method_id]="+ 1 +
-                                                        "&s_lines[method_title]="+payment_method+
-                                                        "&s_lines[total]="+"jsai"+
-                                                        requestString,
-//
+                                        (Request.Method.POST, "http://nepstra.com/api/android/xyz.php?" +
+                                                "is_new_customer=" + 1 +
+                                                "&email=" + semail +
+                                                "&first_name=" + sname +
+                                                "&last_name=" + slname +
+                                                "&username=" + sname +
+                                                "&password=" + spassword +
+                                                "&b[first_name]=" + sname +
+                                                "&b[last_name]=" + slname +
+                                                "&b[company]=" + sname +
+                                                "&b[address_1]=" + saddress_1 +
+                                                "&b[address_2]=" + saddress_2 +
+                                                "&b[city]=" + scity +
+                                                "&b[state]=" + sstate +
+                                                "&b[postcode]=" + spostcode +
+                                                "&b[country]=" + scountry +
+                                                "&b[email]=" + semail +
+                                                "&b[phone]=" + sphone +
+                                                "&s[first_name]=" + sshipfname +
+                                                "&s[last_name]=" + sshiplname +
+                                                "&s[company]=" + sshipcompany +
+                                                "&s[address_1]=" + sshipaddress_1 +
+                                                "&s[address_2]=" + sshipaddress_2 +
+                                                "&s[city]=" + sshipcity +
+                                                "&s[state]=" + sshipstate +
+                                                "&s[postcode]=" + sshippostcode +
+                                                "&s[country]=" + sshipcountry +
+                                                "&s[email]=" + semail +
+                                                "&s[phone]=" + sphone +
+                                                "&payment_method=" + "productName" +
+                                                "&payment_method_title=" + paymentMethod +
+                                                "&set_paid=" + "true" +
+                                                "&s_lines[method_id]=" + 1 +
+                                                "&s_lines[method_title]=" + paymentMethod +
+                                                "&s_lines[total]=" + "payment for shipping" + requestString,
+
 
                                                 new Response.Listener<String>() {
                                                     @Override
@@ -394,40 +356,6 @@ public class BillingDetails extends AppCompatActivity {
                                     @Override
                                     protected Map<String, String> getParams() {
                                         Map<String, String> params = new HashMap<String, String>();
-//                    params.put("email", semail);
-//                    params.put("first_name", sname);
-//                    params.put("last_name", slname);
-//                    params.put("username", sname);
-//                    params.put("password", "password");
-//                    params.put("b[first_name]", sname);
-//                    params.put("b[last_name]", slname);
-//                    params.put("b[company]", scname);
-//                    params.put("b[address_1]", saddress_1);
-//                    params.put("b[address_2]", saddress_2);
-//                    params.put("b[city]", scity);
-//                    params.put("b[state]", sstate);
-//                    params.put("b[postcode]", spostcode);
-//                    params.put("b[country]", scountry);
-//                    params.put("b[email]", semail);
-//                    params.put("b[phone]", sphone);
-//                    params.put("s[first_name]", sname);
-//                    params.put("s[last_name]", slname);
-//                    params.put("s[company]", scname);
-//                    params.put("s[address_1]", saddress_1);
-//                    params.put("s[address_2]", saddress_2);
-//                    params.put("s[city]", scity);
-//                    params.put("s[state]", sstate);
-//                    params.put("s[postcode]", spostcode);
-//                    params.put("s[country]", scountry);
-//                    params.put("s[email]", semail);
-//                    params.put("s[phone]", sphone);
-//                    params.put("payment_method", "cod");
-//                    params.put("payment_method_title", "cash_on_delivery");
-//                    params.put("s_lines[method_id]", "1");
-//                    params.put("s_lines[method_title]","shipping_title" );
-//                    params.put("s_lines[total]", "50");
-//                    params.put("line_items[101-1]", "static");
-//                    params.put("line_items[80-1]","static");
                                         return params;
                                     }
 
@@ -457,9 +385,9 @@ public class BillingDetails extends AppCompatActivity {
                                 queue.add(sr);
 
 
-                            }});}});}}
+                            }
+                        });
+                    }
 
 
-
-
-
+                });}}

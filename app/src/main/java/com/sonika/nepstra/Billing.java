@@ -93,7 +93,8 @@ public class Billing extends AppCompatActivity {
     public static PayPalConfiguration config = new PayPalConfiguration()
             // Start with mock environment.  When ready, switch to sandbox (ENVIRONMENT_SANDBOX)
             // or live (ENVIRONMENT_PRODUCTION)
-            .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
+            .environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION)
+                    //ENVIRONMENT_SANDBOX)
             .clientId(PayPalConfig.PAYPAL_CLIENT_ID);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,20 +159,6 @@ public class Billing extends AppCompatActivity {
         rb_paypal = findViewById(R.id.radioButtonPaypal);
         rb_bank = findViewById(R.id.radioButtonDirectBank);
         rb_cash = findViewById(R.id.radioButtonCash);
-//
-//        if (rb_paypal.isChecked())
-//        {
-//            payment_method = "Paypal";
-//
-//        }
-//        if (rb_cash.isChecked())
-//        {
-//            payment_method = "cash on deleivery";
-//        }
-//        if (rb_banktransfer.isChecked())
-//        {
-//            payment_method = "Direct bank transfer";
-//        }
 
         lblPassword = (EditText) findViewById(R.id.lbl_password);
         btnplaceorder = (Button) findViewById(R.id.btn_place_order);
@@ -350,11 +337,47 @@ public class Billing extends AppCompatActivity {
                                                 new Response.Listener<String>() {
                                                     @Override
                                                     public void onResponse(String response) {
-                                                        Intent i = new Intent(Billing.this, PaypalActivity.class);
-                                                        startActivity(i);
+
+                                                        try {
+                                                            JSONObject jsonObject = new JSONObject(response);
+                                                            Log.e("simi", "monkey");
+                                                            String status = jsonObject.getString("checkstatus");
+//                                        String message = jsonObject.getString("message");
+////                                      Integer data = jsonObject.getInt(String.valueOf(1)); //yo k gareko?? data =
+                                                            Log.e("status", status);
+
+//                                                            loginpref = getSharedPreferences("LOGINPREF", MODE_PRIVATE);
+//                                                            SharedPreferences.Editor loginedit = loginpref.edit();
+
+                                                            if (status.equals("sucess")) {
+                                                                Intent i = new Intent(Billing.this, PaypalActivity.class);
+                                                                startActivity(i);
+//                                                                loginedit.putBoolean("login", true);
+//                                                                loginedit.putString("email", semail);
+//                                                                loginedit.commit();
+                                                            } else if (status.equals("failed")) {
+//                                                                loginedit.putBoolean("login", false);
+//                                                                loginedit.commit();
+                                                                Toast.makeText(Billing.this, "Email already exist", Toast.LENGTH_SHORT).show();
+                                                            }
+
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+
+
+                                                        //  msgResponse.setText(response.toString());
+
                                                         mprogressDialog.hide();
-                                                        Log.e("HttpClient", "success! response: " + response.toString());
+
+                                                        Log.e("HttpClientlogin", "success! response: " + response.toString());
                                                     }
+
+//                                                        Intent i = new Intent(Billing.this, PaypalActivity.class);
+//                                                        startActivity(i);
+//                                                        mprogressDialog.hide();
+//                                                        Log.e("HttpClient", "success! response: " + response.toString());
+//                                                    }
 
 
                                                 },
