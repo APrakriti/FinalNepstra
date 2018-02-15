@@ -154,12 +154,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MyOrders extends AppCompatActivity {
+public class MyDetailsOrder extends AppCompatActivity {
 
     RecyclerView mRecyclerView;
     List<Myorder>allmyorderlist = new ArrayList<Myorder>();
-   Mydetailsorder myOrderAdpater = null;
-   // MyOrderAdapter myOrderAdpater = null;
+    MyOrderAdapter myOrderAdpater = null;
+    // MyOrderAdapter myOrderAdpater = null;
 
     int flag;
 
@@ -176,7 +176,7 @@ public class MyOrders extends AppCompatActivity {
 //        getSupportActionBar().setCustomView(R.layout.center_action_bar_text);
 
         new MyOrderAsyncTask().execute();
-   }
+    }
 
     class MyOrderAsyncTask extends AsyncTask<String, String, String> {
         SharedPreferences sp = getSharedPreferences("LOGINPREF", MODE_PRIVATE);
@@ -187,7 +187,7 @@ public class MyOrders extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mprogressDialog = new ProgressDialog(MyOrders.this);
+            mprogressDialog = new ProgressDialog(MyDetailsOrder.this);
             mprogressDialog.setMessage("Please wait");
             mprogressDialog.setCancelable(false);
             mprogressDialog.show();
@@ -550,7 +550,7 @@ public class MyOrders extends AppCompatActivity {
 
                     }
                     else
-                        {
+                    {
                         flag = 3;
                     }
                 }
@@ -565,19 +565,19 @@ public class MyOrders extends AppCompatActivity {
             super.onPostExecute(s);
             mprogressDialog.dismiss();
             if (flag == 1) {
-                Toast.makeText(MyOrders.this, "Server/Network issue", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyDetailsOrder.this, "Server/Network issue", Toast.LENGTH_SHORT).show();
 
             } else if (flag == 2) {
-                Toast.makeText(MyOrders.this, "Success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyDetailsOrder.this, "Success", Toast.LENGTH_SHORT).show();
                 mRecyclerView = (RecyclerView) findViewById(R.id.recycle);
-                GridLayoutManager mGrid = new GridLayoutManager(MyOrders.this, 1);
+                GridLayoutManager mGrid = new GridLayoutManager(MyDetailsOrder.this, 1);
                 mRecyclerView.setLayoutManager(mGrid);
                 mRecyclerView.setHasFixedSize(true);
                 mRecyclerView.setNestedScrollingEnabled(false);
-                myOrderAdpater = new Mydetailsorder(MyOrders.this, allmyorderlist);
+                myOrderAdpater = new MyOrderAdapter(MyDetailsOrder.this, allmyorderlist);
                 mRecyclerView.setAdapter(myOrderAdpater);
             } else {
-                Toast.makeText(MyOrders.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyDetailsOrder.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
             }
         }
     }

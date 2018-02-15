@@ -241,7 +241,7 @@ public class Billing extends AppCompatActivity {
                                 scountry = country.getText().toString();
                                 sphone = phone.getText().toString();
                                 semail = email.getText().toString();
-                                int selectedId = rg_paymentmethod.getCheckedRadioButtonId();
+                                final int selectedId = rg_paymentmethod.getCheckedRadioButtonId();
 
                                 // find the radiobutton by returned id
                                 radioButton = (RadioButton) findViewById(selectedId);
@@ -350,14 +350,24 @@ public class Billing extends AppCompatActivity {
 //                                                            SharedPreferences.Editor loginedit = loginpref.edit();
 
                                                             if (status.equals("sucess")) {
-                                                                Intent i = new Intent(Billing.this, PaypalActivity.class);
+                                                                if (radioButton == rb_paypal) {
+                                                                    Intent i = new Intent(Billing.this, PaypalActivity.class);
+                                                                    startActivity(i);
+
+                                                                } else if (radioButton == rb_bank) {
+                                                                Intent i = new Intent(Billing.this, BankActivity.class);
                                                                 startActivity(i);
-//                                                                loginedit.putBoolean("login", true);
-//                                                                loginedit.putString("email", semail);
-//                                                                loginedit.commit();
-                                                            } else if (status.equals("failed")) {
-//                                                                loginedit.putBoolean("login", false);
-//                                                                loginedit.commit();
+                                                            } else if (radioButton == rb_cash) {
+                                                            Intent i = new Intent(Billing.this, CashActivity.class);
+                                                            startActivity(i);}}
+
+
+//                                                                Intent i = new Intent(Billing.this, PaypalActivity.class);
+//                                                                startActivity(i);
+////                                                                loginedit.putBoolean("login", true);
+////                                                                loginedit.putString("email", semail);
+////                                                                loginedit.commit();
+                                                         else if (status.equals("failed")) {
                                                                 Toast.makeText(Billing.this, "Email already exist", Toast.LENGTH_SHORT).show();
                                                             }
 
